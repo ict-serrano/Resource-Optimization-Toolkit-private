@@ -1,0 +1,10 @@
+{
+   "log_level": "DEBUG",
+    "heartbeat": 60,
+    "databroker_interface": {
+       "address": "",
+       "username": "",
+       "password": "",
+       "virtual_host": ""
+    }
+}
