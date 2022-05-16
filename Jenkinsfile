@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        PROJECT_NAME = 'Resource Optimization Toolkit'
+        PROJECT_NAME = 'serrano-rot-pipeline'
         DEPLOY = "${env.GIT_BRANCH == "origin/main" || env.GIT_BRANCH == "origin/develop" ? "true" : "false"}"
         DEPLOY_UVT = "${env.GIT_BRANCH == "origin/main" ? "true" : "false"}"
         CHART_NAME = "${env.GIT_BRANCH == "origin/main" ? "python-example" : "python-example-staging"}"
@@ -87,6 +87,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Deploy in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -115,5 +116,6 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
