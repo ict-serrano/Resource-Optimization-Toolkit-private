@@ -35,3 +35,16 @@ class LogRow:
 
     def to_dict(self):
         return self.__dict__
+
+
+class UserRow:
+
+    def __init__(self, user_row):
+        print(user_row)
+        self.username = user_row[0]
+        self.client_uuid = user_row[1]
+        self.superuser = user_row[2]
+
+    def to_dict(self):
+        return self.__dict__
+

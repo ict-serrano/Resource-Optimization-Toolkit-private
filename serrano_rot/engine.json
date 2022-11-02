@@ -1,6 +1,7 @@
 {
    "log_level": "DEBUG",
     "heartbeat": 60,
+    "engine_uuid": "",
     "databroker_interface": {
        "address": "",
        "username": "",

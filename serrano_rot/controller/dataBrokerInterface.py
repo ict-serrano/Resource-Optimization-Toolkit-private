@@ -1,4 +1,3 @@
-import zmq
 import pika
 import json
 import logging
@@ -29,17 +28,30 @@ class SyncQueue(queues.Queue):
         return self.q.get()
 
 
+# Implements the Exchange 1 async interface (ROT results to clients)
 def ExecutionResponseHander(config, internal_fwd_queue):
+    connection_parameters = pika.ConnectionParameters(host=config["address"],
+                                                      virtual_host=config["virtual_host"],
+                                                      credentials=pika.PlainCredentials(config["username"],
+                                                                                        config["password"]),
+                                                      blocked_connection_timeout=5,
+                                                      socket_timeout=None,
+                                                      heartbeat=0)
 
-    zmq_context = zmq.Context()
-    zmq_socket = zmq_context.socket(zmq.ROUTER)
-    zmq_socket.bind("tcp://%s:%s" % (config["zmq_server"], config["zmq_router_port"]))
+    connection = pika.BlockingConnection(connection_parameters)
+    channel = connection.channel()
+
+    channel.exchange_declare(exchange=constants.DISPATCHER_RESULTS_EXCHANGE, exchange_type='direct')
 
     while True:
-        response_data = internal_fwd_queue.get()
-        zmq_socket.send_multipart([response_data["client_uuid"].encode("ascii"), json.dumps(response_data).encode("ascii")])
+        message = internal_fwd_queue.get()
+        logger.debug("Forward execution response '%s' to client '%s'" % (message["uuid"], message["client_uuid"]))
+        channel.basic_publish(exchange=constants.DISPATCHER_RESULTS_EXCHANGE,
+                              routing_key=message["client_uuid"],
+                              body=json.dumps(message))
 
-# Implements the Category 1 async interface (Dispatcher events to external services)
+
+# Implements the Exchange 4 async interface (Dispatcher events to external services)
 def DispatcherEventHandler(rabbitmq_config, internal_fwd_queue):
     connection_parameters = pika.ConnectionParameters(host=rabbitmq_config["address"],
                                                       virtual_host=rabbitmq_config["virtual_host"],
@@ -55,11 +67,12 @@ def DispatcherEventHandler(rabbitmq_config, internal_fwd_queue):
 
     while True:
         message = internal_fwd_queue.get()
-        # time.sleep(1)
-        channel.basic_publish(exchange=constants.DISPATCHER_EVENTS_EXCHANGE, routing_key='', body=message)
+        channel.basic_publish(exchange=constants.DISPATCHER_EVENTS_EXCHANGE,
+                              routing_key='',
+                              body=json.dumps(message))
 
 
-# Implements the Category 3 async interface that Dispatcher uses to send requests to a specific engine
+# Implements the Exchange 3 async interface that Dispatcher uses to send requests to a specific engine
 def EngineRequestHandler(rabbitmq_config, internal_fwd_queue):
     connection_parameters = pika.ConnectionParameters(host=rabbitmq_config["address"],
                                                       virtual_host=rabbitmq_config["virtual_host"],
@@ -78,11 +91,11 @@ def EngineRequestHandler(rabbitmq_config, internal_fwd_queue):
         print(message)
         engine_id = message["engine_id"]
         request = message["request"]
-        channel.basic_publish(exchange=constants.DISPATCHER_REQUESTS_EXCHANGE, routing_key=engine_id, body=json.dumps(request))
+        channel.basic_publish(exchange=constants.DISPATCHER_REQUESTS_EXCHANGE, routing_key=engine_id,
+                              body=json.dumps(request))
 
 
 class EngineResponseInterface(QThread):
-
     engineResponse = pyqtSignal(object)
 
     def __init__(self, config):
@@ -106,7 +119,6 @@ class EngineResponseInterface(QThread):
         self.wait()
 
     def run(self):
-
         logger.info("RequestInterface is running ...")
 
         def callback(ch, method, properties, body):
@@ -117,7 +129,6 @@ class EngineResponseInterface(QThread):
 
 
 class DataBrokerInterface(QThread):
-
     engineResponse = pyqtSignal(object)
 
     def __init__(self, config):

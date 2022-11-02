@@ -26,12 +26,12 @@ class AccessInterface(QThread):
 
     restInterfaceMessage = pyqtSignal(object)
 
-    def __init__(self, config):
+    def __init__(self, rest_config, db_file):
 
         QThread.__init__(self)
 
-        self.address = config["address"]
-        self.port = config["port"]
+        self.address = rest_config["address"]
+        self.port = rest_config["port"]
 
         self.rest_app = Flask(__name__)
 
@@ -39,7 +39,7 @@ class AccessInterface(QThread):
 
         auth = HTTPBasicAuth()
 
-        self.db = "%s/.rot/rot.db" % os.path.expanduser("~")
+        self.db = db_file
 
         @auth.verify_password
         def verify_password(username, password):
@@ -48,20 +48,26 @@ class AccessInterface(QThread):
                 cur.execute("SELECT * FROM users WHERE username = ? AND password = ?", (username, password,))
                 row = cur.fetchone()
                 if row is not None:
-                    return username
+                    return {"client_uuid": row[3], "username": row[1], "superuser": row[4]}
+                else:
+                    return None
 
         @auth.error_handler
         def unauthorized():
             return make_response(jsonify({'error': 'Unauthorized access'}), 401)
 
+        @auth.get_user_roles
+        def get_user_roles(user):
+            return 'superuser' if user["superuser"] == 1 else 'default'
+
         @self.rest_app.route("/api/v1/rot/history", methods=["GET"])
         @auth.login_required
         def execution_history():
             data = []
+            print()
             with sqlite3.connect(self.db) as con:
                 cur = con.cursor()
-                cur.execute("SELECT client_uuid FROM users WHERE username = ?", (request.authorization.username,))
-                client_uuid = cur.fetchone()[0]
+                client_uuid = auth.current_user()["client_uuid"]
                 cur.execute("SELECT * FROM executions WHERE client_uuid = ?", (client_uuid,))
                 for row in cur.fetchall():
                     data.append(dbFormatter.ExecutionRow(row).to_dict())
@@ -73,8 +79,7 @@ class AccessInterface(QThread):
             data = []
             with sqlite3.connect(self.db) as con:
                 cur = con.cursor()
-                cur.execute("SELECT client_uuid FROM users WHERE username = ?", (request.authorization.username,))
-                client_uuid = cur.fetchone()[0]
+                client_uuid = auth.current_user()["client_uuid"]
                 cur.execute("SELECT * FROM executions WHERE (status = ? or status = ?) AND client_uuid = ?",
                             (ExecutionStatus.PENDING, ExecutionStatus.STARTED, client_uuid))
                 for row in cur.fetchall():
@@ -87,17 +92,18 @@ class AccessInterface(QThread):
             if request.method == "GET":
                 data = {}
                 with sqlite3.connect(self.db) as con:
-                    print(execution_id)
                     cur = con.cursor()
-                    cur.execute("SELECT * FROM executions WHERE execution_id = ?", (str(execution_id),))
+                    client_uuid = auth.current_user()["client_uuid"]
+                    cur.execute("SELECT * FROM executions WHERE execution_id = ? and client_uuid = ?",
+                                (str(execution_id),client_uuid,))
                     row = cur.fetchone()
                     if row is not None:
                         data = dbFormatter.ExecutionRow(row).to_dict()
                 return make_response(jsonify(data), 200)
 
             elif request.method == "DELETE":
-                print(execution_id)
-                self.restInterfaceMessage.emit({"cmd": "terminate", "execution_id": execution_id})
+                logger.info("Incoming request for terminating execution '%s'" % str(execution_id))
+                self.restInterfaceMessage.emit({"cmd": "terminate", "execution_id": str(execution_id)})
                 return make_response(jsonify({}), 200)
 
         @self.rest_app.route("/api/v1/rot/execution", methods=["POST"])
@@ -121,8 +127,7 @@ class AccessInterface(QThread):
                     log_entry = "There is no execution engine available."
                     logger.info("Request %s is rejected" % execution_id)
 
-                cur.execute("SELECT client_uuid FROM users WHERE username = ?", (request.authorization.username,))
-                client_uuid = cur.fetchone()[0]
+                client_uuid = auth.current_user()["client_uuid"]
 
                 cur.execute("INSERT INTO executions(execution_id,client_uuid,status,created_at,updated_at) VALUES "
                             "(?,?,?,?,?)", (execution_id, client_uuid, execution_status, at, at,))
@@ -136,12 +141,28 @@ class AccessInterface(QThread):
             return make_response(jsonify({"execution_id": execution_id, "status": request_status}), 200)
 
         @self.rest_app.route("/api/v1/rot/statistics", methods=["GET"])
-        @auth.login_required
+        @auth.login_required(role='superuser')
         def execution_statistics():
-            return make_response(jsonify({}), 200)
+            response = {}
+            with sqlite3.connect(self.db) as con:
+                cur = con.cursor()
+
+                cur.execute("SELECT count(*) FROM engines")
+                response["number_of_engines"] = cur.fetchone()[0]
+
+                cur.execute("SELECT count(*) FROM executions")
+                response["execution_requests"] = cur.fetchone()[0]
+
+                cur.execute("SELECT count(*) FROM executions WHERE status = 2")
+                response["completed_executions"] = cur.fetchone()[0]
+
+                cur.execute("SELECT count(*) FROM executions WHERE status !=2")
+                response["failed_executions"] = cur.fetchone()[0]
+
+            return make_response(jsonify(response), 200)
 
         @self.rest_app.route("/api/v1/rot/engines", methods=["GET"])
-        @auth.login_required
+        @auth.login_required(role='superuser')
         def active_engines():
             data = []
             with sqlite3.connect(self.db) as con:
@@ -152,7 +173,7 @@ class AccessInterface(QThread):
             return make_response(jsonify({"engines": data}), 200)
 
         @self.rest_app.route("/api/v1/rot/engine/<uuid:engine_id>", methods=["GET"])
-        @auth.login_required
+        @auth.login_required(role='superuser')
         def engine_details(engine_id):
             data = {}
             with sqlite3.connect(self.db) as con:
@@ -173,6 +194,61 @@ class AccessInterface(QThread):
                 for row in cur.fetchall():
                     data.append(dbFormatter.LogRow(row).to_dict())
             return make_response(jsonify({"log_details": data}), 200)
+
+        @self.rest_app.route("/api/v1/rot/users", methods=["GET"])
+        @auth.login_required(role='superuser')
+        def get_users():
+            data = []
+
+            with sqlite3.connect(self.db) as con:
+                cur = con.cursor()
+                cur.execute("SELECT username,client_uuid, superuser FROM users")
+                for row in cur.fetchall():
+                    data.append({"username": row[0], "client_uuid": row[1], "superuser": row[2]})
+
+            return make_response(jsonify({"users": data}), 200)
+
+        @self.rest_app.route("/api/v1/rot/user", methods=["POST"])
+        @auth.login_required(role='superuser')
+        def create_user():
+            logger.info("Incoming request for create/update user credentials")
+            with sqlite3.connect(self.db) as con:
+                cur = con.cursor()
+                if "username" not in request.json or "password" not in request.json:
+                    return make_response(jsonify({'error': 'Bad request'}), 400)
+
+                superuser = 0
+
+                if "superuser" in request.json:
+                    superuser = request.json["superuser"]
+
+                cur.execute("SELECT client_uuid FROM users WHERE username = ?", (request.json["username"],))
+                row = cur.fetchone()
+
+                if row is None:
+                    client_uuid = str(uuid.uuid4())
+                    cur.execute("INSERT INTO users(username,password,client_uuid,superuser) VALUES (?,?,?,?)",
+                                (request.json["username"], request.json["password"], client_uuid, superuser,))
+                else:
+                    client_uuid = row[0]
+                    cur.execute("UPDATE users SET password = ?, superuser = ? WHERE client_uuid = ?",
+                                (request.json["password"], superuser, client_uuid, ))
+                con.commit()
+
+            return make_response(jsonify({"client_uuid": client_uuid}), 200)
+
+        @self.rest_app.route("/api/v1/rot/user/<uuid:client_uuid>", methods=["DELETE"])
+        @auth.login_required(role='superuser')
+        def delete_user(client_uuid):
+            logger.info("Incoming request to delete user '%s'" % (str(client_uuid)))
+
+            with sqlite3.connect(self.db) as con:
+
+                cur = con.cursor()
+                cur.execute("DELETE FROM users WHERE client_uuid = ?", (str(client_uuid), ))
+                con.commit()
+
+            return make_response(jsonify({}), 200)
 
     def __del__(self):
         self.wait()

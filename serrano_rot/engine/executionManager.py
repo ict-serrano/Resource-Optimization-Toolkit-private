@@ -29,6 +29,7 @@ class ExecutionManager(QObject):
             self.__active_execution_ids.append("")
             self.__helper_instances[i].standardError.connect(self.__handle_standardError)
             self.__helper_instances[i].standardOutput.connect(self.__handle_standardOutput)
+            self.__helper_instances[i].executionTerminated.connect(self.__handle_executionTerminated)
 
     def __handle_standardError(self, data):
 
@@ -49,6 +50,16 @@ class ExecutionManager(QObject):
                                               "reason": "", "results": data["standard_output"]}))
         self.remove_active_execution_id(exec_id)
 
+    def __handle_executionTerminated(self, data):
+
+        exec_id = self.__active_execution_ids[data["helper_instance_id"]]
+
+        self.forwardResponse.emit(json.dumps({"engine_id": self.engine_id, "type": "execution", "execution_id": exec_id,
+                                              "status": ResponseStatus.CANCELLED, "timestamp": int(time.time()),
+                                              "reason": "Cancelled by the user", "results": {}}))
+
+        self.remove_active_execution_id(exec_id)
+
     def __assign_instance_id(self, execution_id):
 
         for instance in self.__helper_instances:
@@ -60,6 +71,14 @@ class ExecutionManager(QObject):
 
     def get_active_execution_ids(self):
         return self.__active_execution_ids
+
+    def __get_instance_id_by_execution_id(self, execution_id):
+        instance_id = None
+        for iid, eid in enumerate(self.__active_execution_ids):
+            if execution_id == eid:
+                instance_id = iid
+                break
+        return instance_id
 
     def remove_active_execution_id(self, execution_id):
         print(self.__active_execution_ids)
@@ -100,7 +119,16 @@ class ExecutionManager(QObject):
                 self.__helper_instances[instance_id].start(req["execution_plugin"], json.dumps(req["parameters"]))
 
         elif req["action"] == "cancel" and req["engine_id"] == self.engine_id:
-            print("TERMINATE EXECUTION")
+
+            logger.info("Terminate execution '%s'" % req["execution_id"])
+
+            instance_id = self.__get_instance_id_by_execution_id(req["execution_id"])
+
+            if instance_id is None:
+                logger.debug("Unable to find active instance for execution '%s'" % req["execution_id"])
+                return
+
+            self.__helper_instances[instance_id].terminate()
 
         else:
             logger.debug("Invalid request description, request is discarded")

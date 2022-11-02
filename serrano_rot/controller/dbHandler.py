@@ -1,6 +1,5 @@
 import time
 import json
-import os.path
 import logging
 import sqlite3
 
@@ -9,9 +8,9 @@ logger = logging.getLogger('SERRANO.ROT.DBHandler')
 
 class DBHandler:
 
-    def __init__(self, heartbeat_limit):
+    def __init__(self, heartbeat_limit, db_file):
         self.heartbeat_limit = heartbeat_limit
-        self.con = sqlite3.connect("%s/.rot/rot.db" % os.path.expanduser("~")) #"%s/rot.db" % (os.path.dirname(__file__)))
+        self.con = sqlite3.connect(db_file)
         self.dbCursor = self.con.cursor()
 
     def is_engine_in_db(self, engine_id):

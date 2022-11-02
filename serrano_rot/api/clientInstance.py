@@ -1,22 +1,50 @@
 import json
 import logging
+import os.path
+
 import requests
 
-# import openmic.agent.heartbeat as heartbeat
-# import openmic.agent.internal_manager as internalManager
-# import openmic.agent.communication_interface as communicationInterface
+from serrano_rot.api import clientEvents
+from serrano_rot.api import clientContext
 
 logger = logging.getLogger("SERRANO.ROT.API.ClientInstance")
 
 
 class ClientInstance:
 
-    def __init__(self, client_context):
-        self.__client_context = client_context
-        self.__http_auth = client_context.get_http_basic_auth()
-        self.__rest_url = client_context.get_rest_url()
-        # self.communication_interface = communicationInterface.CommunicationInterface(agent_context)
-        #self.internal_manager = internalManager.InternalManager(client_context)
+    def __init__(self):
+
+        self.__rest_url = None
+        self.__http_auth = None
+        self.__databroker = None
+        self.__client_uuid = None
+
+        self.__load_configuration("%s/.rot/api.json" % (os.path.expanduser("~")))
+        self.__client_context = clientContext.ClientContext(self.__client_uuid, self.__databroker)
+
+    def __load_configuration(self, config_file):
+
+        try:
+            with open(config_file) as f:
+                params = json.load(f)
+
+                self.__client_uuid = params["api_client"]["client_uuid"]
+                self.__databroker = params["databroker_interface"]
+
+                self.__rest_url = "http://%s:%s" % (params["api_client"]["server_address"],
+                                                    params["api_client"]["server_port"])
+
+                self.__http_auth = (params["api_client"]["username"], params["api_client"]["password"])
+
+        except FileNotFoundError:
+            raise clientEvents.ConfigurationError("Invalid configuration - FileNotFoundError")
+        except json.JSONDecodeError as s:
+            raise clientEvents.ConfigurationError("Invalid configuration - JSONDecodeError: %s" % s.msg)
+        except KeyError as s:
+            raise clientEvents.ConfigurationError("Invalid configuration - Missing configuration parameter %s" % s)
+
+    def connect(self, events, handler):
+        self.__client_context.connect(events, handler)
 
     def get_engines(self):
         data = {}

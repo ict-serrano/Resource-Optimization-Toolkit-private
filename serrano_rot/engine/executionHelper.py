@@ -16,6 +16,7 @@ class ExecutionHelper(QObject):
 
     standardOutput = pyqtSignal(object)
     standardError = pyqtSignal(object)
+    executionTerminated = pyqtSignal(object)
 
     def __init__(self, instance_id):
 
@@ -61,3 +62,9 @@ class ExecutionHelper(QObject):
         self.__p.readyReadStandardOutput.connect(self.__handle_stdout)
         self.__p.readyReadStandardError.connect(self.__handle_stderr)
         self.__p.start("python3", [self.__wrapper_script, execution_plugin, parameters])
+
+    def terminate(self):
+        logger.debug("Terminate assigned execution for Helper_Instance_ID '%s'" % self.__instance_id)
+        self.__p.kill()
+        self.clear()
+        self.executionTerminated.emit({"helper_instance_id": self.__instance_id})

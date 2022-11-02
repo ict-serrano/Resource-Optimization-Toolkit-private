@@ -15,6 +15,7 @@ logger = logging.getLogger("SERRANO.ROT.Dispatcher")
 class Dispatcher(QObject):
     dispatcherRequest = pyqtSignal(object)
     executionResponse = pyqtSignal(object)
+    engineEvent = pyqtSignal(object)
 
     def __init__(self, config):
         super(QObject, self).__init__()
@@ -22,7 +23,7 @@ class Dispatcher(QObject):
         self.engines = []
         self.executions_per_engine = {}
         self.client_uuid_per_execution_id = {}
-        self.dbHandler = dbHandler.DBHandler(config["heartbeat_limit"])
+        self.dbHandler = dbHandler.DBHandler(config["engines"]["heartbeat_limit"], config["sqlite_db"])
         self.bookkeepingTimer = QTimer()
         self.bookkeepingTimer.timeout.connect(self.__bookkeeping_engines)
         self.bookkeepingTimer.start(90000)
@@ -36,6 +37,10 @@ class Dispatcher(QObject):
             del self.executions_per_engine[eid]
             self.dbHandler.set_engine_inactive(eid)
             logger.info("Lost engine '%s' - set it inactive" % eid)
+            print("Lost engine '%s' - set it inactive" % eid)
+            self.engineEvent.emit({"engine_id": eid, "event_id": "ENGINE_DOWN",
+                                   "message": "Unable to retrieve heartbeat messages by Execution Engine",
+                                   "timestamp": int(time.time())})
 
         # TODO -> check for pending assigned executions at affected engines and "reschedule" them
 
@@ -48,6 +53,14 @@ class Dispatcher(QObject):
                 n = len(v)
                 engine_id = k
 
+        return engine_id
+
+    def __get_engine_by_execution_id(self, execution_id):
+        engine_id = None
+        for eid, executions in self.executions_per_engine.items():
+            if execution_id in executions:
+                engine_id = eid
+                break
         return engine_id
 
     # SLOT Method
@@ -71,10 +84,17 @@ class Dispatcher(QObject):
                  "parameters": data["request_params"]["parameters"]})
 
         elif data["cmd"] == "terminate":
-            if data["execution_id"] in self.executions_per_engine.keys():
-                engine_id = self.executions_per_engine[data["execution_id"]]
-                k = {"engine_id": engine_id, "action": "cancel", "execution_id": data["execution_id"]}
+
+            engine_id = self.__get_engine_by_execution_id(data["execution_id"])
+
+            if engine_id is not None:
+                self.dispatcherRequest.emit({"engine_id": engine_id, "action": "cancel",
+                                             "execution_id": data["execution_id"]})
                 self.dbHandler.add_log_entry(data["execution_id"], "Dispatcher", "Request execution terminate.")
+
+                # Note: Internal structure executions_per_engine is updated after receiving the termination response
+                #       by the engine in method handle_engine_response()
+
             else:
                 logger.debug("Unable to find active execution for termination with the requested execution "
                              "id: %s - Request discarded" % data["execution_id"])
@@ -92,12 +112,19 @@ class Dispatcher(QObject):
                 self.executions_per_engine[data["engine_id"]] = []
                 if self.dbHandler.is_engine_in_db(data["engine_id"]) == 0:
                     self.dbHandler.create_engine_entry(data)
+                    self.engineEvent.emit({"engine_id": data["engine_id"], "event_id": "ENGINE_UP",
+                                           "message": "New Execution Engine is detected by ROT controller",
+                                           "timestamp": data["timestamp"]})
                 else:
                     self.dbHandler.update_engine_heartbeat(data)
+                    self.engineEvent.emit({"engine_id": data["engine_id"], "event_id": "ENGINE_RECONNECTED",
+                                           "message": "Existing Execution Engine is again available",
+                                           "timestamp": data["timestamp"]})
             else:
                 self.dbHandler.update_engine_heartbeat(data)
 
         elif data["type"] == "execution":
+
             self.dbHandler.add_log_entry(data["execution_id"], "Dispatcher", "Receive engine response. Status: %s - "
                                                                              "Reason: %s" % (data["status"],
                                                                                              data["reason"]))
@@ -108,11 +135,14 @@ class Dispatcher(QObject):
             self.dbHandler.update_execution_results(data["execution_id"], data["status"], data["results"])
             self.dbHandler.add_log_entry(data["execution_id"], "Results", data["results"])
 
+            # Clear internal assignments for executions per engine
+            self.executions_per_engine[data["engine_id"]].remove(data["execution_id"])
+
             if data["execution_id"] in self.client_uuid_per_execution_id:
                 client_uuid = self.client_uuid_per_execution_id[data["execution_id"]]
                 self.executionResponse.emit({"client_uuid": client_uuid, "uuid": data["execution_id"],
-                                             "status": data["status"], "reason": data["reason"],
-                                             "results": data["results"]})
+                                             "status": data["status"], "results": data["results"],
+                                             "timestamp": int(time.time())})
                 logger.debug("Response for execution '%s' is forwarded at client '%s'" % (data["execution_id"],
                                                                                           client_uuid))
                 del self.client_uuid_per_execution_id[data["execution_id"]]

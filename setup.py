@@ -9,8 +9,10 @@ setup(
     url='',
     packages=[
         'serrano_rot',
+        'serrano_rot.api',
         'serrano_rot.algorithms',
         'serrano_rot.algorithms.Dummy',
+        'serrano_rot.algorithms.SimpleMatch',
         'serrano_rot.controller',
         'serrano_rot.engine',
         'serrano_rot.tests',

@@ -1,3 +1,7 @@
+class ConfigurationError(Exception):
+    pass
+
+
 class EventBase(object):
 
     def __init__(self):
@@ -13,8 +17,11 @@ class ControllerResponse(EventBase):
 
 class EventEnginesChanged(EventBase):
 
-    def __init__(self):
+    def __init__(self, notification_params):
         super(EventEnginesChanged, self).__init__()
+        self.engine_uuid = notification_params["engine_id"]
+        self.event_id = notification_params["event_id"]
+        self.timestamp = notification_params["timestamp"]
 
 
 class EventExecutionCompleted(EventBase):
