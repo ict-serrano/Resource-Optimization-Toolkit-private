@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rot-controller-config
+  namespace: serrano
+data:
+  controller.json: |
+    {
+       "log_level": "INFO",
+       "rest_interface": {
+         "address": "0.0.0.0",
+         "port": 10020
+       },
+       "sqlite_db": "/home/serrano/.rot/rot.db",
+       "engines": {
+         "heartbeat": 60,
+         "heartbeat_limit": 120
+       },
+       "databroker_interface": {
+         "address": "",
+         "username": "",
+         "password": "",
+         "virtual_host": ""
+       }
+    }

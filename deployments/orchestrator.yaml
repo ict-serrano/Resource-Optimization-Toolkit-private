@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: serrano-rot-controller
+  namespace: serrano
+spec:
+  selector:
+    matchLabels:
+      app: serrano-rot-controller
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: serrano-rot-controller
+    spec:
+      imagePullSecrets:
+      - name: serrano-registry-key
+      containers:
+      - name: serrano-rot-controller
+        image: ictserrano/serrano:rot-v1.0
+        command: ["python3"]
+        args: ["/home/serrano/serrano_rot/controllerInstance.py"]
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 10020
+        volumeMounts:
+         - name: rot-controller-config
+           mountPath: /etc/serrano
+      volumes:
+       - name: rot-controller-config
+         configMap:
+           name: rot-controller-config
+
+           
