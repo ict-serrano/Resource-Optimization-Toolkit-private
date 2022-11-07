@@ -87,7 +87,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Deploy in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -98,6 +97,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Integration Tests') {
             when {
                 environment name: 'DEPLOY', value: 'true'
