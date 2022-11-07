@@ -93,7 +93,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-//                    sh "helm install cilium cilium/cilium --namespace=kube-system"
+                    sh "rm -rf ${CHART_NAME}"
                     sh "mkdir ./helm | helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm"
                 }
             }
