@@ -101,8 +101,10 @@ pipeline {
             when {
                 environment name: 'DEPLOY', value: 'true'
             }
+            /*
             steps {
             }
+            */
         }
         stage('Cleanup INTRA Deployment') {
             when {
