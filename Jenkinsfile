@@ -97,7 +97,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Integration Tests') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -115,6 +114,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Deploy in UVT Kubernetes') {
             when {
                 environment name: 'DEPLOY_UVT', value: 'true'
