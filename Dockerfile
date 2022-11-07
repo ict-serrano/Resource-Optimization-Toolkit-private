@@ -1,4 +1,7 @@
-FROM ictserrano/serrano:ubuntu-v1.0
+FROM ubuntu:20.04
+ARG DEBIAN_FRONTEND=noninteractive
+ENV TZ=Europe/Athens 
+RUN apt-get update && apt-get install -y python3-pip libglib2.0-0
 RUN useradd -m serrano
 RUN mkdir -p /etc/serrano
 USER serrano
