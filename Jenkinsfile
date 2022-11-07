@@ -9,7 +9,7 @@ pipeline {
         REGISTRY = 'serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot'
         REGISTRY_URL = 'https://serrano-harbor.rid-intrasoft.eu/serrano'
         REGISTRY_CREDENTIAL = 'harbor-jenkins'
-        UVT_KUBERNETES_PUBLIC_ADDRESS = 'k8s.serrano.cs.uvt.ro'
+        UVT_KUBERNETES_PUBLIC_ADDRESS = 'api.k8s.cloud.ict-serrano.eu'
         INTEGRATION_OPERATOR_TOKEN = credentials('uvt-integration-operator-token')
     }
     agent {
@@ -103,7 +103,6 @@ pipeline {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
-
             }
         }
         stage('Cleanup INTRA Deployment') {
@@ -113,6 +112,19 @@ pipeline {
             steps {
                 container('helm') {
                     sh "helm uninstall ${CHART_NAME} --namespace integration"
+                }
+            }
+        }
+        stage('Deploy in UVT Kubernetes') {
+            when {
+                environment name: 'DEPLOY_UVT', value: 'true'
+            }
+            steps {
+                container('helm') {
+                    sh "kubectl config set-cluster kubernetes-uvt --certificate-authority=uvt.cer --embed-certs=true --server=https://${UVT_KUBERNETES_PUBLIC_ADDRESS}:6443"
+                    sh "kubectl config set-credentials integration-operator --token=${INTEGRATION_OPERATOR_TOKEN}"
+                    sh "kubectl config set-context kubernetes-uvt --cluster=kubernetes-uvt --user=integration-operator"
+                    sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm-uvt"
                 }
             }
         }
