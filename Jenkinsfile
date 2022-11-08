@@ -93,7 +93,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "ls deployments "
+                    sh "kubectl create -f deployments/serrano-namespace.yaml && kubectl create -f deployments/rot-controller-config.yaml && kubectl create -f deployments/orchestrator.yaml && kubectl create -f deployments/nodeport-service-orchestrator.yaml && kubectl create -f deployments/rot-engine-config.yaml && kubectl create -f deployments/engine.yaml"
 //                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm"
                 }
             }
@@ -106,14 +106,15 @@ pipeline {
             steps {
             }
         }
-        
+        */
         stage('Cleanup INTRA Deployment') {
             when {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
                 container('helm') {
-                    sh "helm uninstall ${CHART_NAME} --namespace integration"
+//                    sh "helm uninstall ${CHART_NAME} --namespace integration"
+                    sh "rm -rf deployments"
                 }
             }
         }
@@ -126,10 +127,9 @@ pipeline {
                     sh "kubectl config set-cluster kubernetes-uvt --certificate-authority=uvt.cer --embed-certs=true --server=https://${UVT_KUBERNETES_PUBLIC_ADDRESS}:6443"
                     sh "kubectl config set-credentials integration-operator --token=${INTEGRATION_OPERATOR_TOKEN}"
                     sh "kubectl config set-context kubernetes-uvt --cluster=kubernetes-uvt --user=integration-operator"
-                    sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm-uvt"
+//                    sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm-uvt"
                 }
             }
         }
-        */
     }
 }
