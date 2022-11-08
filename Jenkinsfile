@@ -103,7 +103,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "curl ${DOMAIN}:10020/api/v1/rot/executions
+                    sh "curl ${DOMAIN}:10020/api/v1/rot/executions"
                 }
             }
         }
