@@ -16,7 +16,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: serrano-rot-controller-service
-  namespace: serrano
+#  namespace: serrano
 spec:
   type: NodePort
   selector:
