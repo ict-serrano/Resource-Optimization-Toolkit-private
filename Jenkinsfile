@@ -93,7 +93,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm"
+                    sh "ls"
+//                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm"
                 }
             }
         }
@@ -105,7 +106,7 @@ pipeline {
             steps {
             }
         }
-        */
+        
         stage('Cleanup INTRA Deployment') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -129,5 +130,6 @@ pipeline {
                 }
             }
         }
+        */
     }
 }
