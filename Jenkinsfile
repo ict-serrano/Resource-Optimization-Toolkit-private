@@ -92,8 +92,8 @@ pipeline {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
-                container('helm') {
-                    sh "ls"
+                container('deployments') {
+                    sh "ls deployments "
 //                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm"
                 }
             }
