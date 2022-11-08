@@ -97,15 +97,16 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Integration Tests') {
             when {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
+                container('helm') {
+                    sh "curl ${DOMAIN}:10020/api/v1/rot/executions
+                }
             }
         }
-        */
         stage('Cleanup INTRA Deployment') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -127,7 +128,6 @@ pipeline {
                     sh "kubectl config set-credentials integration-operator --token=${INTEGRATION_OPERATOR_TOKEN}"
                     sh "kubectl config set-context kubernetes-uvt --cluster=kubernetes-uvt --user=integration-operator"
                     sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm-uvt"
-                    sh "helm --kube-apiserver string"
                 }
             }
         }
