@@ -97,6 +97,7 @@ pipeline {
                 }
             }
         }
+        /*
         stage('Integration Tests') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -107,6 +108,7 @@ pipeline {
                 }
             }
         }
+        */
         stage('Cleanup INTRA Deployment') {
             when {
                 environment name: 'DEPLOY', value: 'true'
