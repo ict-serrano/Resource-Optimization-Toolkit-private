@@ -94,7 +94,7 @@ pipeline {
             steps {
                 container('helm') {
 //                    sh "kubectl create -f deployments/rot-controller-config.yaml && kubectl create -f deployments/orchestrator.yaml && kubectl create -f deployments/nodeport-service-orchestrator.yaml && kubectl create -f deployments/rot-engine-config.yaml && kubectl create -f deployments/engine.yaml"
-                    sh "mkdir ./helm | helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} deployments/nodeport-service-orchestrator.yaml ./helm"
+                    sh "mkdir ./helm | helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} deployments/nodeport-service-orchestrator.yaml ${CHART_NAME} ./helm"
                 }
             }
         }
