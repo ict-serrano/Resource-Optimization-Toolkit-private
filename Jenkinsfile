@@ -6,7 +6,7 @@ pipeline {
         CHART_NAME = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot" : "serrano-rot-staging"}"
         VERSION = '0.1'
         DOMAIN = 'localhost'
-        REGISTRY = 'serrano-harbor.rid-intrasoft.eu/serrano/sserrano-rot-pipeline'
+        REGISTRY = 'serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline'
         REGISTRY_URL = 'https://serrano-harbor.rid-intrasoft.eu/serrano'
         REGISTRY_CREDENTIAL = 'harbor-jenkins'
         UVT_KUBERNETES_PUBLIC_ADDRESS = 'api.k8s.cloud.ict-serrano.eu'
