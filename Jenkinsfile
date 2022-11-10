@@ -61,7 +61,7 @@ pipeline {
         stage('Dependency Track') {
             steps {
                 container('python') {
-                    dependencyTrackPublisher artifact: 'bom.xml', projectId: '39acd708-1e14-405e-932e-0af81c96554f', synchronous: true
+                    dependencyTrackPublisher artifact: 'bom.xml', projectId: '539cb834-5bb7-4d2b-a0d7-c91256cb5d61', synchronous: true
                 }
             }
         }
