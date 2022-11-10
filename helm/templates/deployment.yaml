@@ -32,7 +32,7 @@ spec:
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
 #          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-          image: serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline:0.1
+          image: "serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline:0.1 ."
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["python3"]
             args: ["/home/serrano/serrano_rot/controllerInstance.py"]
