@@ -8,7 +8,7 @@ image:
   repository: serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "0.1"
 
 imagePullSecrets:
 - name: regcred
