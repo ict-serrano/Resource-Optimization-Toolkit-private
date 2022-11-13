@@ -31,9 +31,9 @@ spec:
         - name: {{ .Chart.Name }}
           securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
           image: serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline:0.1
-          imagePullPolicy: Always
           command: ["python3"]
-            args: ["/home/serrano/serrano_rot/controllerInstance.py"]
+          args: ["/home/serrano/serrano_rot/controllerInstance.py"]
+          imagePullPolicy: Always
           ports:
             - name: http
               containerPort: 10020
