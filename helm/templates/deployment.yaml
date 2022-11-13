@@ -28,11 +28,9 @@ spec:
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
-        - image: serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline:0.1
-          name: {{ .Chart.Name }}
-          securityContext:
-            {{- toYaml .Values.securityContext | nindent 12 }}
-#          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+        - name: {{ .Chart.Name }}
+          securityContext: {{- toYaml .Values.securityContext | nindent 12 }}
+          image: serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline:0.1
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           command: ["python3"]
             args: ["/home/serrano/serrano_rot/controllerInstance.py"]
