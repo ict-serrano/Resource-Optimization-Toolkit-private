@@ -6,7 +6,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   selector:
-    app: {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
+    app: serrano-rot-pipeline
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
