@@ -3,10 +3,12 @@ kind: Deployment
 metadata:
   name: {{ include "serrano-rot-pipeline.fullname" . }}
   labels: {{- with .Values.test.app }}
+  {{- end }}
 spec: {{- if not .Values.autoscaling.enabled }}
   selector:
     matchLabels: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
       app: {{- with .Values.test.app }}
+      {{- end }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   template:
