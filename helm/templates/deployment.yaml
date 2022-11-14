@@ -53,3 +53,4 @@ spec: {{- if not .Values.autoscaling.enabled }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      
