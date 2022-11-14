@@ -51,7 +51,6 @@ pipeline {
                 }
             }
         }
-        /*
         stage('Generate BOM') {
             steps {
                 container('python') {
@@ -66,7 +65,6 @@ pipeline {
                 }
             }
         }
-        */
         stage('Docker Build') {
             when {
                 environment name: 'DEPLOY', value: 'true'
