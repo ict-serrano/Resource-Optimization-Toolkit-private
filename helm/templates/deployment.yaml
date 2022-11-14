@@ -5,13 +5,13 @@ metadata:
   labels: {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
 spec: {{- if not .Values.autoscaling.enabled }}
   selector:
-    matchLabels: 
-      app: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 4 }}
+    matchLabels: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
+      app: serrano-rot-pipeline
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   template:
-    metadata: 
-      app: {{- with .Values.podAnnotations }}
+    metadata: {{- with .Values.podAnnotations }}
+      app: serrano-rot-pipeline
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
