@@ -6,7 +6,7 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   selector:
-    app: serrano-rot-pipeline
+    app: {{ .Values.test.app }}
   ports:
     - port: {{ .Values.service.port }}
       targetPort: http
