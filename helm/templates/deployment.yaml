@@ -6,7 +6,7 @@ metadata:
 spec: {{- if not .Values.autoscaling.enabled }}
   selector:
     matchLabels: 
-      app: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
+      app: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 4 }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   template:
