@@ -39,7 +39,7 @@ securityContext: {}
 
 service:
   type: NodePort
-  port: 10100
+  port: 10020
 
 ingress:
   enabled: false
