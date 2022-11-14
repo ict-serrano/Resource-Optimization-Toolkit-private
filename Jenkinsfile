@@ -3,7 +3,7 @@ pipeline {
         PROJECT_NAME = 'serrano-rot-pipeline'
         DEPLOY = "${env.GIT_BRANCH == "origin/main" || env.GIT_BRANCH == "origin/develop" ? "true" : "false"}"
         DEPLOY_UVT = "${env.GIT_BRANCH == "origin/main" ? "true" : "false"}"
-        CHART_NAME = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot" : "serrano-rot-staging"}"
+        CHART_NAME = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-pipeline" : "serrano-rot-pipeline-staging"}"
         VERSION = '0.1'
         DOMAIN = 'localhost'
         REGISTRY = 'serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline'
