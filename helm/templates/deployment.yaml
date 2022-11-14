@@ -2,18 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "serrano-rot-pipeline.fullname" . }}
-  labels: {{- with .Values.test.app }}
-  {{- end }}
+  labels: {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
 spec: {{- if not .Values.autoscaling.enabled }}
-  selector:
-    matchLabels: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
-      app: {{- with .Values.test.app }}
-      {{- end }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
+  selector:
+    matchLabels: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
   template:
     metadata: {{- with .Values.podAnnotations }}
-      app: serrano-rot-pipeline
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
@@ -55,4 +51,3 @@ spec: {{- if not .Values.autoscaling.enabled }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      
