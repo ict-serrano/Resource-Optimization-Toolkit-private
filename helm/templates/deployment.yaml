@@ -2,11 +2,11 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "serrano-rot-pipeline.fullname" . }}
-  labels: serrano-rot-pipeline
+  labels: {{ .Values.test.app }}
 spec: {{- if not .Values.autoscaling.enabled }}
   selector:
     matchLabels: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
-      app: serrano-rot-pipeline
+      app: {{ .Values.test.app }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   template:
