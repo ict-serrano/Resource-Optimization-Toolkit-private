@@ -15,9 +15,6 @@ imagePullSecrets:
 nameOverride: ""
 fullnameOverride: ""
 
-test:
-  app: "serrano-rot-pipeline"
-
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
