@@ -4,12 +4,14 @@ metadata:
   name: {{ include "serrano-rot-pipeline.fullname" . }}
   labels: {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
 spec: {{- if not .Values.autoscaling.enabled }}
+  selector:
+    matchLabels: 
+      app: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
-  selector:
-    matchLabels: {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
   template:
-    metadata: {{- with .Values.podAnnotations }}
+    metadata: 
+      app: {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
