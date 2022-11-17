@@ -94,7 +94,7 @@ pipeline {
             steps {
                 container('helm') {
 //                    sh "helm uninstall ${CHART_NAME} --namespace integration"
-                    sh "helm uninstall rot-engine-config"
+                    sh "helm uninstall rot-engine-config --namespace integration"
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
             }
