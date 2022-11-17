@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: rot-engine-config
+data:
+  engine.json: |
+    {
+      "log_level": "INFO",
+      "heartbeat": 60,
+      "engine_uuid": "",
+      "databroker_interface": {
+        "address": "",
+        "username": "",
+        "password": "",
+        "virtual_host": ""
+      }
+    }
