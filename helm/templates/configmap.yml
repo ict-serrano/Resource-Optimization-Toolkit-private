@@ -1,8 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: rot-engine-config
-  namespace: integration
+  name: {{ include "serrano-rot-pipeline.fullname" . }}
 data:
   engine.json: |
     {
