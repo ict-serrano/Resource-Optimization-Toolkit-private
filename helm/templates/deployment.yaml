@@ -48,13 +48,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
-      volumeMounts:
-        - name: {{ include "serrano-rot-pipeline.fullname" . }}
-          mountPath: /etc/serrano
-      volumes:
-       - name: {{ include "serrano-rot-pipeline.fullname" . }}
-         configMap:
-           name: {{ include "serrano-rot-pipeline.fullname" . }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
