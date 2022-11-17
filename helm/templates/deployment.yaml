@@ -48,13 +48,6 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
-      volumeMounts:
-        - name: rot-engine-config
-          mountPath: /etc/serrano
-      volumes:
-       - name: rot-engine-config
-         configMap:
-           name: rot-engine-config
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
