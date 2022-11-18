@@ -97,8 +97,7 @@ pipeline {
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
             }
-        }
-        /*
+        }/*
         stage('Integration Tests') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -119,8 +118,7 @@ pipeline {
                     sh "rm -rf deployments"
                 }
             }
-        }
-        */
+        }*/
         stage('Deploy in UVT Kubernetes') {
             when {
                 environment name: 'DEPLOY_UVT', value: 'true'
