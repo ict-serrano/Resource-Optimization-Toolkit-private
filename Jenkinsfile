@@ -119,7 +119,8 @@ pipeline {
                     sh "rm -rf deployments"
                 }
             }
-        }*/
+        }
+        */
         stage('Deploy in UVT Kubernetes') {
             when {
                 environment name: 'DEPLOY_UVT', value: 'true'
