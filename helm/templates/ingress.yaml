@@ -15,18 +15,15 @@ apiVersion: extensions/v1beta1
   {{- end }}
 kind: Ingress
 metadata:
-  name: {{ $fullName }}
+  name: serrano-rot-pipeline
   labels:
-    {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
-  {{- with .Values.ingress.annotations }}
+    app: serrano-rot-pipeline
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
   {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
-  ingressClassName: {{ .Values.ingress.className }}
-  {{- end }}
-  {{- if .Values.ingress.tls }}
+  ingressClassName: serrano-rot-pipeline
   tls:
     {{- range .Values.ingress.tls }}
     - hosts:
@@ -49,12 +46,12 @@ spec:
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
-                name: {{ $fullName }}
+                name: serrano-rot-pipeline
                 port:
-                  number: {{ $svcPort }}
+                  number: 10020
               {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
+              serviceName: serrano-rot-pipeline
+              servicePort: 10020
               {{- end }}
           {{- end }}
     {{- end }}
