@@ -37,6 +37,8 @@ securityContext: {}
   # runAsNonRoot: true
 # runAsUser: 1000
 
+labels: serrano-rot-pipeline
+
 service:
   type: NodePort
   port: 10020
