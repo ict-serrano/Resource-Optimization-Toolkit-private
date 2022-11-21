@@ -25,20 +25,24 @@ Create chart name and version as used by the chart label.
 Selector labels
 */}}
 {{- define "serrano-rot-pipeline.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "serrano-rot-pipeline.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+{{ include "serrano-rot-pipeline.fullname" . }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
 {{- define "serrano-rot-pipeline.labels" -}}
-{{ include "serrano-rot-pipeline.fullname" . }}
+helm.sh/chart: {{ include "serrano-rot-pipeline.chart" . }}
+{{ include "serrano-rot-pipeline.selectorLabels" . }}
+{{- if .Chart.AppVersion }}
+app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
+{{- end }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
 {{- define "serrano-rot-pipeline.serviceAccountName" -}}
-{{- "serrano-rot-pipeline" }}
+{{ include "serrano-rot-pipeline.fullname" . }}
 {{- end }}
