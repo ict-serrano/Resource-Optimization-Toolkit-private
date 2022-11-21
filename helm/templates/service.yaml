@@ -13,4 +13,4 @@ spec:
       nodePort: 10020
   selector:
     matchLabels:
-      app: serrano-rot-pipeline
+      app: "serrano-rot-pipeline"
