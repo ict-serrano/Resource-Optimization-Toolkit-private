@@ -3,9 +3,6 @@ kind: Service
 metadata:
   name: serrano-rot-pipeline
   labels: serrano-rot-pipeline
-#  name: {{ include "serrano-rot-pipeline.fullname" . }}
-#  labels: 
-#    {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -14,6 +11,4 @@ spec:
       protocol: TCP
       name: http
   selector: serrano-rot-pipeline
-#  selector:
-#    {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 4 }}
   

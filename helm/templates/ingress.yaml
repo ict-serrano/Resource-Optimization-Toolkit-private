@@ -15,12 +15,8 @@ apiVersion: extensions/v1beta1
   {{- end }}
 kind: Ingress
 metadata:
-#  name: {{ $fullName }}
   name: serrano-rot-pipeline
   labels: serrano-rot-pipeline
-#  labels:
-#    {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
-#  {{- with .Values.ingress.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
   {{- end }}
