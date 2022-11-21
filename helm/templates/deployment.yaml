@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: {{ include "serrano-rot-pipeline.fullname" . }}
   labels:
-    {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
+    {{ include "serrano-rot-pipeline.labels" . }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
