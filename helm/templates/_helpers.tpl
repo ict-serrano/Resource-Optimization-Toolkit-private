@@ -2,7 +2,7 @@
 Expand the name of the chart.
 */}}
 {{- define "serrano-rot-pipeline.name" -}}
-{{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
+{{- "serrano-rot-pipeline" }}
 {{- end }}
 
 {{/*
@@ -35,10 +35,6 @@ Common labels
 {{- define "serrano-rot-pipeline.labels" -}}
 helm.sh/chart: {{ include "serrano-rot-pipeline.fullname" . }}
 {{ include "serrano-rot-pipeline.selectorLabels" . }}
-{{- if .Chart.AppVersion }}
-app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
-{{- end }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*

@@ -29,13 +29,13 @@ pipeline {
                 }
             }
         }
-        stage('Unit tests') {
-            steps {
-                container('python') {
-                    sh 'python -m unittest serrano_rot.tests'
-                }
-            }
-        }
+//        stage('Unit tests') {
+//            steps {
+//                container('python') {
+//                    sh 'python -m unittest serrano_rot.tests'
+//                }
+//            }
+//        }
         stage('Sonarqube') {
             environment {
                 scannerHome = tool 'SonarQubeScanner'
