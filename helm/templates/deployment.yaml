@@ -13,7 +13,6 @@ spec:
     metadata:
       annotations:
         {{- toYaml . | nindent 8 }}
-      {{- end }}
       labels:
         app: serrano-rot-pipeline
     spec:
