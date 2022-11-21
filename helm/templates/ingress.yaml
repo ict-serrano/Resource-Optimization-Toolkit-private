@@ -47,12 +47,12 @@ spec:
             backend:
               {{- if semverCompare ">=1.19-0" $.Capabilities.KubeVersion.GitVersion }}
               service:
-                name: {{ $fullName }}
+                name: serrano-rot-pipeline
                 port:
-                  number: {{ $svcPort }}
+                  number: 10020
               {{- else }}
-              serviceName: {{ $fullName }}
-              servicePort: {{ $svcPort }}
+              serviceName: serrano-rot-pipeline
+              servicePort: 10020
               {{- end }}
           {{- end }}
     {{- end }}
