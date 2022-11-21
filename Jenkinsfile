@@ -64,7 +64,7 @@ pipeline {
                     dependencyTrackPublisher artifact: 'bom.xml', projectId: '39acd708-1e14-405e-932e-0af81c96554f', synchronous: true
                 }
             }
-        }
+        }/*
         stage('Docker Build') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -86,7 +86,7 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         stage('Deploy in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -94,7 +94,6 @@ pipeline {
             steps {
                 container('helm') {
  //                   sh "helm uninstall ${CHART_NAME} --namespace integration"
-                    sh "kubectl get services --all-namespaces"
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
             }
