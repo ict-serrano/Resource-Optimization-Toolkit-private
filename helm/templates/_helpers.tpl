@@ -25,19 +25,19 @@ Create chart name and version as used by the chart label.
 Selector labels
 */}}
 {{- define "serrano-rot-pipeline.selectorLabels" -}}
-{{- s"errano-rot-pipeline" }}
+{{- "serrano-rot-pipeline" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
 {{- define "serrano-rot-pipeline.labels" -}}
-{{- s"errano-rot-pipeline" }}
+{{- "serrano-rot-pipeline" }}
 {{- end }}
 
 {{/*
 Create the name of the service account to use
 */}}
 {{- define "serrano-rot-pipeline.serviceAccountName" -}}
-{{- s"errano-rot-pipeline" }}
+{{- "serrano-rot-pipeline" }}
 {{- end }}
