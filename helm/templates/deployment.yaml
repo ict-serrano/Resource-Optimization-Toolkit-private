@@ -1,30 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "serrano-rot-pipeline.fullname" . }}
+#  name: {{ include "serrano-rot-pipeline.fullname" . }}
+  name: serrano-rot-pipeline
   labels:
-    {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
+#    {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
+    serrano-rot-pipeline
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
+#      {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 6 }}
+      serrano-rot-pipeline
   template:
     metadata:
       {{- with .Values.podAnnotations }}
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      labels:
-        {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 8 }}
+      labels: serrano-rot-pipeline
+#        {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      serviceAccountName: {{ include "serrano-rot-pipeline.serviceAccountName" . }}
+#      serviceAccountName: {{ include "serrano-rot-pipeline.serviceAccountName" . }}
+      serviceAccountName: serrano-rot-pipeline
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
       containers:
