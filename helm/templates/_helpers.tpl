@@ -33,7 +33,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Common labels
 */}}
 {{- define "serrano-rot-pipeline.labels" -}}
-{{- "serrano-rot-pipeline" }}
+{{ include "serrano-rot-pipeline.fullname" . }}
 {{- end }}
 
 {{/*
