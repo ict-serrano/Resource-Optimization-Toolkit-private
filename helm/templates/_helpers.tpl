@@ -33,8 +33,8 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Common labels
 */}}
 {{- define "serrano-rot-pipeline.labels" -}}
-helm.sh/chart: {{ include "serrano-rot-pipeline.fullname" . }}
-{{ include "serrano-rot-pipeline.fullname" . }}
+helm.sh/chart: {{ include "serrano-rot-pipeline.chart" . }}
+{{ include "serrano-rot-pipeline.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
