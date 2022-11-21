@@ -4,8 +4,7 @@ metadata:
   name: {{ include "serrano-rot-pipeline.fullname" . }}
   labels:
     {{- include "serrano-rot-pipeline.labels" . | nindent 4 }}
-spec:
-  {{- if not .Values.autoscaling.enabled }}
+spec: {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
