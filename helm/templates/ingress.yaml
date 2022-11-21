@@ -4,9 +4,6 @@ metadata:
   name: serrano-rot-pipeline
   labels:
     app: serrano-rot-pipeline
-  annotations:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
 spec:
   {{- if and .Values.ingress.className (semverCompare ">=1.18-0" .Capabilities.KubeVersion.GitVersion) }}
   ingressClassName: serrano-rot-pipeline
