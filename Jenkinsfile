@@ -90,7 +90,7 @@ pipeline {
         stage('test') {
             steps {
                 container('python') {
-                    sh "ls"
+                    sh "kubectl get pods --all-namespaces"
                 }
             }
         }
