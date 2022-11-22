@@ -13,4 +13,3 @@ spec:
       name: http
   selector: 
     {{- include "serrano-rot-pipeline.selectorLabels" . | nindent 4 }}
-  

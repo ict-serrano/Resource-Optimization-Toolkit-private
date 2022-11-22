@@ -7,7 +7,7 @@ pipeline {
         VERSION = '0.1'
         DOMAIN = 'localhost'
         REGISTRY = 'serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline'
-        REGISTRY_URL = ''
+        REGISTRY_URL = 'https://serrano-harbor.rid-intrasoft.eu/serrano'
         REGISTRY_CREDENTIAL = 'harbor-jenkins'
         UVT_KUBERNETES_PUBLIC_ADDRESS = 'api.k8s.cloud.ict-serrano.eu'
         INTEGRATION_OPERATOR_TOKEN = credentials('uvt-integration-operator-token')
@@ -97,8 +97,7 @@ pipeline {
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
             }
-        }
-        /*
+        }/*
         stage('Integration Tests') {
             when {
                 environment name: 'DEPLOY', value: 'true'
