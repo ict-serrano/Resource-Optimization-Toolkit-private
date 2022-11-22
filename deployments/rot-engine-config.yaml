@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: rot-engine-config
-#  namespace: serrano
+  namespace: integration
 data:
   engine.json: |
     {
