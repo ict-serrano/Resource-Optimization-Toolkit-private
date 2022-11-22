@@ -93,8 +93,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "kubectl get pod ${CHART_NAME} --namespace integration"
-                    sh "helm repo list"
+//                    sh "kubectl get pod ${CHART_NAME} --namespace integration"
+//                    sh "helm repo list"
                     sh "helm uninstall ${CHART_NAME} --namespace integration"
                     sh "helm upgrade --install --force --wait --timeout 1800s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
