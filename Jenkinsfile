@@ -94,7 +94,7 @@ pipeline {
             steps {
                 container('helm') {
 //                    sh "kubectl describe pod serrano-rot-pipeline --namespace integration"
-                    sh "kubectl get configmaps --namespace integration"
+//                    sh "kubectl get configmaps --namespace integration"
                     sh "kubectl get pods --namespace integration"
                     sh "kubectl get svc --namespace integration"
                     sh "helm uninstall ${CHART_NAME} --namespace integration"
