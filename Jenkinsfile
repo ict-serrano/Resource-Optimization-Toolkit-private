@@ -93,13 +93,15 @@ pipeline {
             }
             steps {
                 container('helm') {
-/*                    sh "kubectl create -f deployments/engine.yaml"
+                    /*sh "kubectl create -f deployments/engine.yaml"
                     sh "kubectl create -f deployments/nodeport-service-orchestrator.yaml"
                     sh "kubectl create -f deployments/orchestrator.yaml"
-//                    sh "kubectl create -f deployments/rot-controller-config.yaml"
-//                    sh "kubectl create -f deployments/rot-engine-config.yaml"*/
-//                    sh "kubectl get deployments --namespace integration"
-//                    sh "kubectl describe pod serrano-rot-pipeline-5d654676c5-2kmgn --namespace integration"
+                    sh "kubectl create -f deployments/rot-controller-config.yaml"
+                    sh "kubectl create -f deployments/rot-engine-config.yaml"
+                    sh "kubectl get deployments --namespace integration"*/
+                    sh "kubectl describe pod serrano-rot-pipeline-5d654676c5-2kmgn --namespace integration"
+                    sh "kubectl describe pod serrano-rot-endigne --namespace integration"
+                    sh "kubectl describe pod serrano-rot-controller --namespace integration"
                     sh "kubectl get pods --namespace integration"
 //                    sh "helm uninstall ${CHART_NAME} --namespace integration"
 //                    sh "kubectl get pods --namespace integration"
