@@ -11,6 +11,6 @@ spec:
     - protocol: TCP
       port: 10020
       targetPort: 10020
-      nodePort: 10020
+      nodePort: 30020
 
 

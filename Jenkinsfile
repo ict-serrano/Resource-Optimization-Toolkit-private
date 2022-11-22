@@ -93,7 +93,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "kubectl create -f deployments/engine.yaml"
+//                    sh "kubectl create -f deployments/engine.yaml"
                     sh "kubectl create -f deployments/nodeport-service-orchestrator.yaml"
                     sh "kubectl create -f deployments/orchestrator.yaml"
                     sh "kubectl create -f deployments/rot-controller-config.yaml"
