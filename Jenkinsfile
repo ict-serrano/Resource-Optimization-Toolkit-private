@@ -95,7 +95,7 @@ pipeline {
                 container('helm') {
                     sh "kubectl describe pod serrano-edge-device-df49d654d-sm8zb --namespace integration"
                     sh "kubectl describe pod serrano-rot-pipeline-5d654676c5-wp58x  --namespace integration"
-                    sh "kubectl describe pod serrano-rot-pipeline-237-l3h9n-xc30x-tvg2l --namespace integration"
+                    sh "kubectl describe pod serrano-rot-pipeline --namespace integration"
                     sh "kubectl get svc --namespace integration"
 //                    sh "helm repo list"
 //                    sh "helm uninstall ${CHART_NAME} --namespace integration"
