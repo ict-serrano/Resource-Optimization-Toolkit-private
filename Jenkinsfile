@@ -87,19 +87,14 @@ pipeline {
                 }
             }
         }
-        stage('test') {
-            steps {
-                container('helm') {
-                    sh "helm list"
-                }
-            }
-        }
         stage('Deploy in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
                 container('helm') {
+                    sh "helm list"
+                    sh "helm get all"
                     sh "helm uninstall ${CHART_NAME} --namespace integration"
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
