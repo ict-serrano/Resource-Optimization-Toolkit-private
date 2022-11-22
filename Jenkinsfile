@@ -93,6 +93,7 @@ pipeline {
             }
             steps {
                 container('helm') {
+                    sh "docker container ls"
                     sh "kubectl describe pod serrano-rot-pipeline-5d654676c5-2kmgn --namespace integration"
 //                    sh "kubectl get pods --namespace integration"
 //                    sh "helm uninstall ${CHART_NAME} --namespace integration"
