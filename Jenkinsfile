@@ -87,6 +87,13 @@ pipeline {
                 }
             }
         }
+        stage('test') {
+            steps {
+                container('python') {
+                    sh "ls"
+                }
+            }
+        }
         stage('Deploy in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
