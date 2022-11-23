@@ -64,7 +64,7 @@ pipeline {
                     dependencyTrackPublisher artifact: 'bom.xml', projectId: '39acd708-1e14-405e-932e-0af81c96554f', synchronous: true
                 }
             }
-        }/*
+        }
         stage('Docker Build') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -86,31 +86,31 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
         stage('Deploy in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
-                container('helm') {
-/*                    sh "kubectl create -f deployments/engine.yaml"
+                container('helm') {/*
+                    sh "kubectl create -f deployments/engine.yaml"
                     sh "kubectl create -f deployments/nodeport-service-orchestrator.yaml"
-                    sh "kubectl create -f deployments/orchestrator.yaml"/*
+                    sh "kubectl create -f deployments/orchestrator.yaml"
                     sh "kubectl create -f deployments/rot-controller-config.yaml"
                     sh "kubectl create -f deployments/rot-engine-config.yaml"
-                    sh "kubectl get deployments --namespace integration"
+                    sh "kubectl get deployments --namespace integration"*/
                     sh "kubectl delete deployment serrano-rot-engine --namespace integration"
                     sh "kubectl delete deployment serrano-rot-controller --namespace integration"
                     sh "kubectl delete service serrano-rot-controller-service --namespace integration"
-                    sh "kubectl get pods --namespace integration"
-                    sh "helm uninstall ${CHART_NAME} --namespace integration"*/
+                    sh "kubectl get pods --namespace integration"/*
+                    sh "helm uninstall ${CHART_NAME} --namespace integration"
                     sh "kubectl describe pod serrano-rot-controller-5cdcb7cf76-zz6xv --namespace integration"
                     sh "kubectl describe pod serrano-rot-engine-686959847b-5kdtg --namespace integration"
                     sh "kubectl describe pod serrano-rot-engine-686959847b-5n8gr --namespace integration"
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
-                    sh "kubectl get pods --namespace integration"
-//                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
+                    sh "kubectl get pods --namespace integration"*/
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
             }
         }/*
