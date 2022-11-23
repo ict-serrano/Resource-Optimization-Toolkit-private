@@ -26,7 +26,7 @@ class RequestInterface(QThread):
                                                           blocked_connection_timeout=5,
                                                           socket_timeout=None,
                                                           heartbeat=0)
-
+        
         connection = pika.BlockingConnection(connection_parameters)
         self.channel = connection.channel()
         self.channel.exchange_declare(exchange=constants.DISPATCHER_REQUESTS_EXCHANGE, exchange_type='direct')
@@ -37,7 +37,8 @@ class RequestInterface(QThread):
         logger.info("RequestInterface is read. Waiting for requests ...")
 
     def __del__(self):
-        self.wait()
+        return""
+        #self.wait()
 
     def run(self):
 
