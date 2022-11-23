@@ -104,6 +104,11 @@ pipeline {
                     sh "kubectl delete service serrano-rot-controller-service --namespace integration"
                     sh "kubectl get pods --namespace integration"
                     sh "helm uninstall ${CHART_NAME} --namespace integration"*/
+                    sh "kubectl describe pod serrano-rot-controller-5cdcb7cf76-zz6xv --namespace integration"
+                    sh "kubectl describe pod serrano-rot-engine-686959847b-5kdtg --namespace integration"
+                    sh "kubectl describe pod serrano-rot-engine-686959847b-5n8gr --namespace integration"
+                    sh "kubectl get deployments --namespace integration"
+                    sh "kubectl get services --namespace integration"
                     sh "kubectl get pods --namespace integration"
 //                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
