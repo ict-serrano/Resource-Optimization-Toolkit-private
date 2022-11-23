@@ -92,7 +92,7 @@ pipeline {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
-                container('helm') {
+                container('helm') {/*
                     sh "kubectl get pods --namespace integration"
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
@@ -105,9 +105,9 @@ pipeline {
                     sh "kubectl describe service serrano-rot-pipeline --namespace integration"
                     sh "kubectl describe service serrano-edge-device --namespace integration"
                     sh "kubectl describe replicaset serrano-rot-pipeline-d94fd594f --namespace integration"
-                    sh "kubectl describe replicaset serrano-edge-device-df49d654d --namespace integration"
-//                    sh "helm uninstall ${CHART_NAME} --namespace integration"
-//                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
+                    sh "kubectl describe replicaset serrano-edge-device-df49d654d --namespace integration"*/
+                    sh "helm uninstall ${CHART_NAME} --namespace integration"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
             }
         }/*
