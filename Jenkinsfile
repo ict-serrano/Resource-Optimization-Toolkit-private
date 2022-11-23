@@ -97,6 +97,9 @@ pipeline {
 //                    sh "helm uninstall ${CHART_NAME} --namespace integration"
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
+                    sh "kubectl get replicasets --namespace integration"
+                    sh "kubectl get serviceaccount --namespace --namespace integration"
+                    sh "kubectl get ingress --namespace --namespace integration"
 //                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
             }
