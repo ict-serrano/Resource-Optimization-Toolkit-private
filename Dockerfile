@@ -13,6 +13,3 @@ COPY setup.py .
 RUN python3 setup.py install --user
 RUN mkdir -p /home/serrano/.rot
 COPY serrano_rot/rot.db /home/serrano/.rot/rot.db
-USER root
-RUN chmod 666 /home/serrano/.rot/rot.db
-USER serrano
