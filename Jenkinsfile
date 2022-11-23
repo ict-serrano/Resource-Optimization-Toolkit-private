@@ -93,17 +93,17 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    /*sh "kubectl create -f deployments/engine.yaml"
+                    sh "kubectl create -f deployments/engine.yaml"
                     sh "kubectl create -f deployments/nodeport-service-orchestrator.yaml"
-                    sh "kubectl create -f deployments/orchestrator.yaml"
+                    sh "kubectl create -f deployments/orchestrator.yaml"/*
                     sh "kubectl create -f deployments/rot-controller-config.yaml"
                     sh "kubectl create -f deployments/rot-engine-config.yaml"
-                    sh "kubectl get deployments --namespace integration"*/
+                    sh "kubectl get deployments --namespace integration"
                     sh "kubectl delete deployment serrano-rot-engine --namespace integration"
                     sh "kubectl delete deployment serrano-rot-controller --namespace integration"
                     sh "kubectl delete service serrano-rot-controller-service --namespace integration"
-//                    sh "kubectl get pods --namespace integration"
-                    sh "helm uninstall ${CHART_NAME} --namespace integration"
+                    sh "kubectl get pods --namespace integration"
+                    sh "helm uninstall ${CHART_NAME} --namespace integration"*/
                     sh "kubectl get pods --namespace integration"
 //                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
