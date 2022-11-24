@@ -4,7 +4,7 @@ pipeline {
         DEPLOY = "${env.GIT_BRANCH == "origin/main" || env.GIT_BRANCH == "origin/develop" ? "true" : "false"}"
         DEPLOY_UVT = "${env.GIT_BRANCH == "origin/main" ? "true" : "false"}"
         ENGINE = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-engine" : "serrano-rot-engine-staging"}"
-        CONTROLLER = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-controller : "serrano-rot-controller-staging"}"
+        CONTROLLER = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-controller" : "serrano-rot-controller-staging"}"
         VERSION = '0.1'
         DOMAIN = 'localhost'
         REGISTRY = 'serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline'
