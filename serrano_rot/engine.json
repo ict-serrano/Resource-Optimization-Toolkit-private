@@ -3,9 +3,9 @@
     "heartbeat": 60,
     "engine_uuid": "",
     "databroker_interface": {
-       "address": "sparrow.rmq.cloudamqp.com",
-       "username": "xgsbofqs",
-       "password": "OQfcdqCfTlEOKOZZ_8YHCV1cVTzy7sL5",
-       "virtual_host": "xgsbofqs"
+       "address": "",
+       "username": "",
+       "password": "",
+       "virtual_host": ""
     }
 }

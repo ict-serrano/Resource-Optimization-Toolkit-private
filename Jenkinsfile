@@ -64,7 +64,7 @@ pipeline {
                     dependencyTrackPublisher artifact: 'bom.xml', projectId: '39acd708-1e14-405e-932e-0af81c96554f', synchronous: true
                 }
             }
-        }
+        }/*
         stage('Docker Build') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -86,14 +86,14 @@ pipeline {
                     }
                 }
             }
-        }
+        }*/
         stage('Deploy in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
-                container('helm') {/*
-                    sh "kubectl get pods --namespace integration"
+                container('helm') {
+                    sh "kubectl get pods --namespace integration"/*
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
                     sh "kubectl get replicasets --namespace integration"
@@ -106,8 +106,8 @@ pipeline {
                     sh "kubectl describe service serrano-edge-device --namespace integration"
                     sh "kubectl describe replicaset serrano-rot-pipeline-d94fd594f --namespace integration"
                     sh "kubectl describe replicaset serrano-edge-device-df49d654d --namespace integration"*/
-                    sh "helm uninstall ${CHART_NAME} --namespace integration"
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
+//                    sh "helm uninstall ${CHART_NAME} --namespace integration"
+//                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
             }
         }/*

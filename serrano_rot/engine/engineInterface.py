@@ -30,10 +30,10 @@ class EngineInterface(QThread):
         self.responseInterface.forward_response_to_controller(data)
 
     def __del__(self):
-        return""
-        #self.wait()
+        self.wait()
 
     def run(self):
         self.requestInterface.start()
         #self.responseInterface.start()
         logger.info("EngineInterface is running ...")
+

@@ -23,10 +23,10 @@ class ResponseInterface(QObject):
 
         connection = pika.BlockingConnection(connection_parameters)
         self.channel = connection.channel()
-        #self.channel.queue_declare(queue=constants.ENGINE_RESPONSE_QUEUE)
+        self.channel.queue_declare(queue=constants.ENGINE_RESPONSE_QUEUE)
 
         logger.info("ResponseInterface is ready ...")
 
     def forward_response_to_controller(self, data):
         logger.debug("Forward response to controller: %s" % data)
-        #self.channel.basic_publish(exchange="", routing_key=constants.ENGINE_RESPONSE_QUEUE, body=data)
+        self.channel.basic_publish(exchange="", routing_key=constants.ENGINE_RESPONSE_QUEUE, body=data)
