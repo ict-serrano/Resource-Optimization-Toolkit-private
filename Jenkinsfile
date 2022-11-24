@@ -92,11 +92,11 @@ pipeline {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
-                container('helm') {/*
+                container('helm') {
                     sh "kubectl get pods --namespace integration"
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
-                    sh "kubectl get replicasets --namespace integration"
+                    sh "kubectl get replicasets --namespace integration"/*
                     sh "kubectl describe pod serrano-rot-pipeline-d94fd594f-dlthf --namespace integration"
                     sh "kubectl describe pod serrano-rot-pipeline-2 --namespace integration"
                     sh "kubectl describe pod serrano-edge-device-df49d654d-sm8zb --namespace integration"
