@@ -1,20 +1,18 @@
 {
-   "log_level": "INFO",
-   "rest_interface": {
+    "log_level": "INFO",
+    "rest_interface": {
         "address": "0.0.0.0",
         "port": 10020
-    },
-    "sqlite_db": "",
-    "engines": {
-        "heartbeat": 60,
-        "heartbeat_limit": 120
-    },
-    "databroker_interface": {
-       "address": "",
-       "username": "",
-       "password": "",
-       "virtual_host": "",
-      "zmq_server": "0.0.0.0",
-      "zmq_router_port": 10030
-    }
-}
+     },
+     "sqlite_db": "",
+     "engines": {
+         "heartbeat": 60,
+         "heartbeat_limit": 120
+     },
+     "databroker_interface": {
+        "address": "sparrow.rmq.cloudamqp.com",
+        "username": "xgsbofqs",
+        "password": "OQfcdqCfTlEOKOZZ_8YHCV1cVTzy7sL5",
+        "virtual_host": "xgsbofqs"
+     }
+ }
