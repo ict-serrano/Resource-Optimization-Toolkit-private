@@ -94,24 +94,16 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "kubectl get pods --namespace integration"/*
-                    sh "kubectl get deployments --namespace integration"
-                    sh "kubectl get services --namespace integration"
-                    sh "kubectl get replicasets --namespace integration"
-                    sh "kubectl describe pod serrano-rot-pipeline-d94fd594f-dtql8 --namespace integration"
-                    sh "kubectl describe pod serrano-rot-pipeline-2 --namespace integration"
-                    sh "kubectl describe pod serrano-edge-device-df49d654d-sm8zb --namespace integration"
-                    sh "kubectl describe deployment serrano-rot-pipeline --namespace integration"
-                    sh "kubectl describe deployment serrano-edge-device --namespace integration"
-                    sh "kubectl describe service serrano-rot-pipeline --namespace integration"
-                    sh "kubectl describe service serrano-edge-device --namespace integration"
-                    sh "kubectl describe replicaset serrano-rot-pipeline-d94fd594f --namespace integration"
-                    sh "kubectl describe replicaset serrano-edge-device-df49d654d --namespace integration"
-                    sh "kubectl logs serrano-edge-device-df49d654d-sm8zb --namespace integration"
-                    sh "kubectl logs serrano-rot-pipeline-d94fd594f-dtql8 --namespace integration"*/
-//                    sh "helm uninstall ${ENGINE} --namespace integration"
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm"
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm"
+                    sh "kubectl get pods --namespace integration"
+                    sh "helm uninstall ${ENGINE} --namespace integration"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
+                }
+            }
+            steps {
+                container('helm') {
+                    sh "kubectl get pods --namespace integration"
+                    sh "helm uninstall ${CONTROLLER} --namespace integration"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
                 }
             }
         }/*
