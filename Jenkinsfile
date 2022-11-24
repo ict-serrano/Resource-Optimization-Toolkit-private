@@ -94,7 +94,7 @@ pipeline {
             steps {
                 container('helm') {
                     sh "kubectl get pods --namespace integration"
-                    sh "kubectl logs serrano-rot-pipeline-d94fd594f-kb88g --namespace integration"/*
+                    sh "kubectl describe pod serrano-rot-pipeline-d94fd594f-kb88g --namespace integration"/*
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
                     sh "kubectl get replicasets --namespace integration"
