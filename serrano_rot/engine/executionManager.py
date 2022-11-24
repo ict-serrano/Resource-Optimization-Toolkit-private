@@ -6,8 +6,8 @@ import logging
 from PyQt5.QtCore import QObject
 from PyQt5.QtCore import pyqtSignal
 
-from serrano_rot.utils.enums import ResponseStatus
-from serrano_rot.engine.executionHelper import ExecutionHelper
+from utils.enums import ResponseStatus
+from engine.executionHelper import ExecutionHelper
 
 logger = logging.getLogger("SERRANO.ROT.ExecutionManager")
 
