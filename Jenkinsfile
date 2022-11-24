@@ -3,7 +3,8 @@ pipeline {
         PROJECT_NAME = 'serrano-rot-pipeline'
         DEPLOY = "${env.GIT_BRANCH == "origin/main" || env.GIT_BRANCH == "origin/develop" ? "true" : "false"}"
         DEPLOY_UVT = "${env.GIT_BRANCH == "origin/main" ? "true" : "false"}"
-        CHART_NAME = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-pipeline" : "serrano-rot-pipeline-staging"}"
+        ENGINE = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-engine" : "serrano-rot-engine-staging"}"
+        CONTROLLER = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-controller : "serrano-rot-controller-staging"}"
         VERSION = '0.1'
         DOMAIN = 'localhost'
         REGISTRY = 'serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline'
@@ -93,12 +94,12 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "kubectl get pods --namespace integration"
-                    sh "kubectl get deployments --namespace integration"/*
+                    sh "kubectl get pods --namespace integration"/*
+                    sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
                     sh "kubectl get replicasets --namespace integration"
                     sh "kubectl describe pod serrano-rot-pipeline-d94fd594f-dtql8 --namespace integration"
- //                   sh "kubectl describe pod serrano-rot-pipeline-2 --namespace integration"
+                    sh "kubectl describe pod serrano-rot-pipeline-2 --namespace integration"
                     sh "kubectl describe pod serrano-edge-device-df49d654d-sm8zb --namespace integration"
                     sh "kubectl describe deployment serrano-rot-pipeline --namespace integration"
                     sh "kubectl describe deployment serrano-edge-device --namespace integration"
@@ -108,8 +109,9 @@ pipeline {
                     sh "kubectl describe replicaset serrano-edge-device-df49d654d --namespace integration"
                     sh "kubectl logs serrano-edge-device-df49d654d-sm8zb --namespace integration"
                     sh "kubectl logs serrano-rot-pipeline-d94fd594f-dtql8 --namespace integration"*/
-//                    sh "helm uninstall ${CHART_NAME} --namespace integration"
-//                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
+                    sh "helm uninstall ${ENGINE} --namespace integration"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm"
                 }
             }
         }/*
@@ -129,7 +131,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "helm uninstall ${CHART_NAME} --namespace integration"
+                    sh "helm uninstall ${ENGINE} --namespace integration"
                     sh "rm -rf deployments"
                 }
             }
@@ -143,7 +145,7 @@ pipeline {
                     sh "kubectl config set-cluster kubernetes-uvt --certificate-authority=uvt.cer --embed-certs=true --server=https://${UVT_KUBERNETES_PUBLIC_ADDRESS}:6443"
                     sh "kubectl config set-credentials integration-operator --token=${INTEGRATION_OPERATOR_TOKEN}"
                     sh "kubectl config set-context kubernetes-uvt --cluster=kubernetes-uvt --user=integration-operator"
-                    sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm-uvt"
+                    sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm-uvt"
                 }
             }
         }
