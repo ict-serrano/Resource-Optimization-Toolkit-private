@@ -109,7 +109,8 @@ pipeline {
                     sh "kubectl describe replicaset serrano-edge-device-df49d654d --namespace integration"
                     sh "kubectl logs serrano-edge-device-df49d654d-sm8zb --namespace integration"
                     sh "kubectl logs serrano-rot-pipeline-d94fd594f-dtql8 --namespace integration"*/
-                    sh "helm uninstall ${ENGINE} --namespace integration"
+                    sh "helm uninstall serrano-rot-pipeline --namespace integration"//replace it with the line bellow
+//                    sh "helm uninstall ${ENGINE} --namespace integration"
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm"
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm"
                 }
