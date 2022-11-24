@@ -14,3 +14,4 @@ RUN python3 setup.py install --user
 RUN mkdir -p /home/serrano/.rot
 COPY serrano_rot/rot.db /home/serrano/.rot/rot.db
 COPY serrano_rot/engine.json /home/serrano/.rot/engine.json
+COPY serrano_rot/controller.json /home/serrano/.rot/controller.json
