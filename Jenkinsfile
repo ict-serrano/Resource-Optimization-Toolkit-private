@@ -1,6 +1,6 @@
 pipeline {
     environment {
-        PROJECT_NAME = 'serrano-rot-pipeline-'
+        PROJECT_NAME = 'serrano-rot-pipeline'
         DEPLOY = "${env.GIT_BRANCH == "origin/main" || env.GIT_BRANCH == "origin/develop" ? "true" : "false"}"
         DEPLOY_UVT = "${env.GIT_BRANCH == "origin/main" ? "true" : "false"}"
         ENGINE = "${env.GIT_BRANCH == "origin/main" ? "engine" : "engine-staging"}"
