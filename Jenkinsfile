@@ -96,16 +96,18 @@ pipeline {
                     sh "kubectl get pods --namespace integration"
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
-                    sh "kubectl get replicasets --namespace integration"/*
-                    sh "kubectl describe pod serrano-rot-pipeline-d94fd594f-dlthf --namespace integration"
-                    sh "kubectl describe pod serrano-rot-pipeline-2 --namespace integration"
+                    sh "kubectl get replicasets --namespace integration"
+                    sh "kubectl describe pod serrano-rot-pipeline-d94fd594f-dtql8 --namespace integration"
+ //                   sh "kubectl describe pod serrano-rot-pipeline-2 --namespace integration"
                     sh "kubectl describe pod serrano-edge-device-df49d654d-sm8zb --namespace integration"
                     sh "kubectl describe deployment serrano-rot-pipeline --namespace integration"
                     sh "kubectl describe deployment serrano-edge-device --namespace integration"
                     sh "kubectl describe service serrano-rot-pipeline --namespace integration"
                     sh "kubectl describe service serrano-edge-device --namespace integration"
                     sh "kubectl describe replicaset serrano-rot-pipeline-d94fd594f --namespace integration"
-                    sh "kubectl describe replicaset serrano-edge-device-df49d654d --namespace integration"*/
+                    sh "kubectl describe replicaset serrano-edge-device-df49d654d --namespace integration"
+                    sh "kubectl logs serrano-edge-device-df49d654d-sm8zb --namespace integration"
+                    sh "kubectl logs serrano-rot-pipeline-d94fd594f-dtql8 --namespace integration"
 //                    sh "helm uninstall ${CHART_NAME} --namespace integration"
 //                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} --debug ./helm"
                 }
