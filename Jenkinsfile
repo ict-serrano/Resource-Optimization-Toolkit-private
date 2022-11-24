@@ -97,10 +97,6 @@ pipeline {
                     sh "kubectl get pods --namespace integration"
                     sh "helm uninstall ${ENGINE} --namespace integration"
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
-                }
-            }
-            steps {
-                container('helm') {
                     sh "kubectl get pods --namespace integration"
                     sh "helm uninstall ${CONTROLLER} --namespace integration"
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
