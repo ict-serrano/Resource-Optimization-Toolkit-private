@@ -1,9 +1,9 @@
 pipeline {
     environment {
-        PROJECT_NAME = 'serrano-rot-pipeline-'
+        PROJECT_NAME = 'serrano-rot-pipeline'
         DEPLOY = "${env.GIT_BRANCH == "origin/main" || env.GIT_BRANCH == "origin/develop" ? "true" : "false"}"
         DEPLOY_UVT = "${env.GIT_BRANCH == "origin/main" ? "true" : "false"}"
-        ENGINE = "${env.GIT_BRANCH == "origin/main" ? "engine" : "engine-staging"}"
+        ENGINE = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-engine" : "serrano-rot-engine-staging"}"
         CONTROLLER = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-controller" : "serrano-rot-controller-staging"}"
         VERSION = '0.1'
         DOMAIN = 'localhost'
@@ -95,9 +95,8 @@ pipeline {
             steps {
                 container('helm') {
                     sh "kubectl get pods --namespace integration"
-                    sh "kubectl logs serrano-rot-controller-serrano-rot-pipeline-5fd54fb87-7cjfr --namespace integration"
 //                    sh "helm uninstall ${ENGINE} --namespace integration"
-//                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
                     sh "helm uninstall ${CONTROLLER} --namespace integration"
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
                 }
