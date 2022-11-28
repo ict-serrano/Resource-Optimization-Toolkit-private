@@ -95,7 +95,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
+                    sh "kubectl get ingress --namespace integration"
+                    //sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
                 }
             }
         }
@@ -105,7 +106,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
+                    sh "kubectl get ingress --all-namespaces"
+                    //sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
                 }
             }
         }
@@ -125,8 +127,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "helm uninstall ${ENGINE} --namespace integration"
-                    sh "helm uninstall ${CONTROLLER} --namespace integration"
+                    //sh "helm uninstall ${ENGINE} --namespace integration"
+                    //sh "helm uninstall ${CONTROLLER} --namespace integration"
                     sh "rm -rf deployments"
                 }
             }
