@@ -122,7 +122,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "curl http://${PROJECT_NAME}.integration:10020/"
+                    sh "curl http://${PROJECT_NAME}.integration:30757/"
+//                    sh "curl http://${PROJECT_NAME}.integration:10020/"
                 }
             }
         }/*
