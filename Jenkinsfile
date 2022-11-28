@@ -122,7 +122,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "curl ${DOMAIN}:10020/"
+                    sh "curl ${DOMAIN}:30757/"
                 }
             }
         }/*
