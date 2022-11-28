@@ -15,3 +15,8 @@ RUN mkdir -p /home/serrano/.rot
 COPY serrano_rot/rot.db /home/serrano/.rot/rot.db
 COPY serrano_rot/engine.json /home/serrano/.rot/engine.json
 COPY serrano_rot/controller.json /home/serrano/.rot/controller.json
+USER root
+COPY serrano_rot/controller.json /etc/serrano/controller.json
+RUN chmod 666 /etc/serrano/controller.json
+RUN chmod 666 /home/serrano/.rot/rot.db
+USER serrano
