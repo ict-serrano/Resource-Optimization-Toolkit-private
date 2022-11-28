@@ -95,8 +95,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "kubectl get ingress --namespace integration"
-                    //sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
                 }
             }
         }
@@ -106,8 +105,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "kubectl get ingress --all-namespaces"
-                    //sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
                 }
             }
         }
@@ -117,7 +115,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-                sh "curl http://${CONTROLLER}.integration.svc.cluster.local:${PORT}/"      
+                sh "curl http://${CONTROLLER}.integration.svc.cluster.local:${PORT}/"
+                sh "curl http://serrano-rot-controller:${PORT}/"    
                 }
             }
         }
