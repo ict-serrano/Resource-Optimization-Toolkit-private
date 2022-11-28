@@ -127,7 +127,8 @@ pipeline {
                         //sleep 20 // Sleep is not required if the readiness probe is enabled
                         try {
                             String testName = "1. Check that app is running - 200 response code"
-                            String url = "http://${CONTROLLER}-integration-${PROJECT_NAME}.integration:30757/"
+//                            String url = "http://${DOMAIN}:30757/"
+                            String url = "http://${DOMAIN}:10020/"
                             String responseCode = sh(label: testName, script: "curl -m 10 -sL -w '%{http_code}' $url -o /dev/null", returnStdout: true)
 
                             if (responseCode != '200') {
