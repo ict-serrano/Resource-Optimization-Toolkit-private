@@ -130,6 +130,10 @@ pipeline {
                                 error("$testName: Returned status code = $responseCode when calling $url")
                             }
                         }
+                        catch (ignored) {
+                            currentBuild.result = 'FAILURE'
+                            echo "Integration Tests failed"
+                        }
                     }
                 }
             }/*
