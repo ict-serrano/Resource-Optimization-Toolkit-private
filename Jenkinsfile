@@ -106,8 +106,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-//                    sh "kubectl describe pod serrano-rot-controller-5fd54fb87-744qh --namespace integration"
-//                    sh "kubectl logs serrano-rot-controller-5fd54fb87-744qh --namespace integration"
+                    sh "kubectl describe pod serrano-rot-controller-5fd54fb87-4fdsf --namespace integration"
+                    sh "kubectl logs serrano-rot-controller-5fd54fb87-4fdsf --namespace integration"
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
 //                    sh "helm uninstall ${CONTROLLER} --namespace integration"
