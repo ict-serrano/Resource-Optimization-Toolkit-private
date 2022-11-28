@@ -95,9 +95,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "kubectl get pods --namespace integration"
-    //                sh "helm uninstall ${ENGINE} --namespace integration" 
-    //                sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
+                    sh "helm uninstall ${ENGINE} --namespace integration" 
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
                 }
             }
         }
@@ -107,9 +106,8 @@ pipeline {
             }
             steps {
                 container('helm') {
-    //                sh "helm uninstall ${CONTROLLER} --namespace integration"
-    //                sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm/controller"
-                    sh "kubectl get pods --namespace integration"
+                    sh "helm uninstall ${CONTROLLER} --namespace integration"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm/controller"
                 }
             }
         }
@@ -122,7 +120,7 @@ pipeline {
                 sh "curl http://${CONTROLLER}.integration.svc.cluster.local:${PORT}/"      
                 }
             }
-        }/*
+        }
         stage('Cleanup INTRA Deployment') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -130,6 +128,7 @@ pipeline {
             steps {
                 container('helm') {
                     sh "helm uninstall ${ENGINE} --namespace integration"
+                    sh "helm uninstall ${CONTROLLER} --namespace integration"
                     sh "rm -rf deployments"
                 }
             }
@@ -159,6 +158,6 @@ pipeline {
                     sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm-uvt/controller"
                 }
             }
-        }*/
+        }
     }
 }
