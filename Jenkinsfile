@@ -128,7 +128,7 @@ pipeline {
 //                sh "curl http://192.168.100.3:10020/"
                 sh "curl http://192.168.100.3:30757/"
                 sh "curl http://10.244.161.247:10020/"
-                sh "curl http://10.244.161.247:30757/"
+//                sh "curl http://10.244.161.247:30757/"
                 sh "curl http://10.109.35.181:10020/"
                 sh "curl http://10.109.35.181:30757/"                
 //                    sh "curl http://${PROJECT_NAME}.integration:30757/"
