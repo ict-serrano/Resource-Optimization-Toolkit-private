@@ -95,8 +95,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    echo "pass"
-                    //sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
                 }
             }
         }
@@ -106,8 +105,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    echo "pass"
-                    //sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
                 }
             }
         }
