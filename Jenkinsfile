@@ -122,7 +122,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "curl ${DOMAIN}:30757/"
+                    sh "curl ${CONTROLLER}-integration-${PROJECT_NAME}.integration:30757/"
                 }
             }
         }/*
