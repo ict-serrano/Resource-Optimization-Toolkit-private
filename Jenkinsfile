@@ -124,7 +124,7 @@ pipeline {
                 container('helm') {
 //                    sh "curl http://${PROJECT_NAME}.integration:30757/"
 //                    sh "curl http://${DOMAIN}.integration:30757/"
-                    sh "curl http://${DOMAIN}.integration:310020/"
+                    sh "curl http://${DOMAIN}.integration:10020/"
 //                    sh "curl http://${PROJECT_NAME}.integration:10020/"
                 }
             }
