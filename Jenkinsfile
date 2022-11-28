@@ -123,13 +123,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                //sh "curl 'http://${ENGINE}-integration-${PROJECT_NAME}.integration:10020/'"
-                //sh "curl 'http://${CONTROLLER}-integration-${PROJECT_NAME}.integration:10020/'"
-                //sh "curl 'http://${PROJECT_NAME}.integration:10020/'"
-                sh "curl serrano-rot-controller.integration.svc.cluster.local:10020/"
-                sh "curl http://192.168.100.3:30757/"
-                sh "curl http://10.244.161.247:10020/"
-                sh "curl http://10.109.35.181:10020/"               
+                sh "curl http://${CONTROLLER}serrano-rot-controller.integration.svc.cluster.local:10020/"      
                 }
             }
         }/*
