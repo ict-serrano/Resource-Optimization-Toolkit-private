@@ -4,7 +4,7 @@
         "address": "0.0.0.0",
         "port": 10020
      },
-     "sqlite_db": "",
+     "sqlite_db": "/home/serrano/.rot/rot.db",
      "engines": {
          "heartbeat": 60,
          "heartbeat_limit": 120
