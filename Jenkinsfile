@@ -123,7 +123,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                sh "curl 'http://${ENGINE}-integration-${PROJECT_NAME}.integration:10020/'"
+                //sh "curl 'http://${ENGINE}-integration-${PROJECT_NAME}.integration:10020/'"
                 sh "curl 'http://${CONTROLLER}-integration-${PROJECT_NAME}.integration:10020/'"
                 sh "curl serrano-rot-controller.integration.svc.cluster.local"
                 sh "curl http://192.168.100.3:30757/"
