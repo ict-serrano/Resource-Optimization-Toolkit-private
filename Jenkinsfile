@@ -65,7 +65,7 @@ pipeline {
                     dependencyTrackPublisher artifact: 'bom.xml', projectId: '39acd708-1e14-405e-932e-0af81c96554f', synchronous: true
                 }
             }
-        }/*
+        }
         stage('Docker Build') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -87,7 +87,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
         stage('Deploy Rot Engine in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -95,8 +95,8 @@ pipeline {
             steps {
                 container('helm') {
                     sh "kubectl get pods --namespace integration"
-//                    sh "helm uninstall ${ENGINE} --namespace integration" 
-//                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
+                    sh "helm uninstall ${ENGINE} --namespace integration" 
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
                 }
             }
         }
@@ -109,9 +109,9 @@ pipeline {
                     sh "kubectl describe pod serrano-rot-controller-5fd54fb87-744qh --namespace integration"
                     sh "kubectl logs serrano-rot-controller-5fd54fb87-744qh --namespace integration"
                     sh "kubectl get deployments --namespace integration"
-                    sh "kubectl get services --namespace integration"/*
+                    sh "kubectl get services --namespace integration"
                     sh "helm uninstall ${CONTROLLER} --namespace integration"
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm/controller"*/
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm/controller"
                 }
             }
         }/*
