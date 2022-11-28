@@ -107,6 +107,7 @@ pipeline {
             steps {
                 container('helm') {
                     sh "kubectl describe pod serrano-rot-controller-5fd54fb87-vtwdp --namespace integration"
+                    sh "kubectl describe service serrano-rot-controller --namespace integration"
 //                    sh "kubectl logs serrano-rot-controller-5fd54fb87-4fdsf --namespace integration"
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
@@ -123,7 +124,7 @@ pipeline {
             steps {
                 container('helm') {
 //                sh "curl http://${DOMAIN}:10020/"
-                sh "curl http://${DOMAIN}:30757/"
+//                sh "curl http://${DOMAIN}:30757/"
                 sh "curl http://192.168.100.3:10020/"
                 sh "curl http://192.168.100.3:30757/"
                 sh "curl http://10.244.161.247:10020/"
