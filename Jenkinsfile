@@ -94,13 +94,9 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "kubectl get pods --namespace integration"/*
-                    sh "kubectl describe pod serrano-rot-controller-5fd54fb87-kkqwp --namespace integration"
-                    sh "kubectl logs serrano-rot-controller-5fd54fb87-kkqwp --namespace integration"
-                    sh "kubectl describe pod serrano-rot-engine-7b756bb4f5-n2xfp --namespace integration"
-                    sh "kubectl logs serrano-rot-engine-7b756bb4f5-n2xfp --namespace integration"
+                    sh "kubectl get pods --namespace integration"
                     sh "kubectl get deployments --namespace integration"
-                    sh "kubectl get services --namespace integration"*/
+                    sh "kubectl get services --namespace integration"
                     sh "helm uninstall ${ENGINE} --namespace integration" 
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
                 }
