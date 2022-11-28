@@ -116,7 +116,11 @@ pipeline {
                 }
             }
         }
-        steps {
+        stage('Integration Tests') {
+            when {
+                environment name: 'DEPLOY', value: 'true'
+            }
+            steps {
                 container('java') {
                     script {
                         echo 'Run your Integration Tests here'
