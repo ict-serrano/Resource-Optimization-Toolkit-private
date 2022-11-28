@@ -12,6 +12,7 @@ pipeline {
         REGISTRY_CREDENTIAL = 'harbor-jenkins'
         UVT_KUBERNETES_PUBLIC_ADDRESS = 'api.k8s.cloud.ict-serrano.eu'
         INTEGRATION_OPERATOR_TOKEN = credentials('uvt-integration-operator-token')
+        PORT = "10020"
     }
     agent {
         kubernetes {
@@ -106,11 +107,6 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "kubectl describe pod serrano-rot-controller-5fd54fb87-vtwdp --namespace integration"
-                    sh "kubectl describe service serrano-rot-controller --namespace integration"
-//                    sh "kubectl logs serrano-rot-controller-5fd54fb87-4fdsf --namespace integration"
-                    sh "kubectl get deployments --namespace integration"
-                    sh "kubectl get services --namespace integration"
     //                sh "helm uninstall ${CONTROLLER} --namespace integration"
     //                sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm/controller"
                     sh "kubectl get pods --namespace integration"
@@ -123,7 +119,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                sh "curl http://${CONTROLLER}serrano-rot-controller.integration.svc.cluster.local:10020/"      
+                sh "curl http://${CONTROLLER}.integration.svc.cluster.local:${PORT}/"      
                 }
             }
         }/*
