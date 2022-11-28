@@ -65,7 +65,7 @@ pipeline {
                     dependencyTrackPublisher artifact: 'bom.xml', projectId: '39acd708-1e14-405e-932e-0af81c96554f', synchronous: true
                 }
             }
-        }/*
+        }
         stage('Docker Build') {
             when {
                 environment name: 'DEPLOY', value: 'true'
@@ -87,7 +87,7 @@ pipeline {
                     }
                 }
             }
-        }*/
+        }
         stage('Deploy Rot Engine in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
