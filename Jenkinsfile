@@ -140,7 +140,8 @@ pipeline {
                         }
                     }
                 }
-            }/*
+            }
+        }/*
         stage('Cleanup INTRA Deployment') {
             when {
                 environment name: 'DEPLOY', value: 'true'
