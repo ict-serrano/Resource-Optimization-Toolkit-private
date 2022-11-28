@@ -95,8 +95,8 @@ pipeline {
             steps {
                 container('helm') {
                     sh "kubectl get pods --namespace integration"
-                    sh "helm uninstall ${ENGINE} --namespace integration" 
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
+    //                sh "helm uninstall ${ENGINE} --namespace integration" 
+    //                sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
                 }
             }
         }
@@ -110,22 +110,22 @@ pipeline {
 //                    sh "kubectl logs serrano-rot-controller-5fd54fb87-4fdsf --namespace integration"
                     sh "kubectl get deployments --namespace integration"
                     sh "kubectl get services --namespace integration"
-                    sh "helm uninstall ${CONTROLLER} --namespace integration"
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm/controller"
+    //                sh "helm uninstall ${CONTROLLER} --namespace integration"
+    //                sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} --debug ./helm/controller"
                     sh "kubectl get pods --namespace integration"
                 }
             }
-        }/*
+        }
         stage('Integration Tests') {
             when {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
                 container('helm') {
-                    sh "curl ${DOMAIN}:10020/api/v1/rot/executions"
+                    sh "curl ${DOMAIN}:10020/"
                 }
             }
-        }
+        }/*
         stage('Cleanup INTRA Deployment') {
             when {
                 environment name: 'DEPLOY', value: 'true'
