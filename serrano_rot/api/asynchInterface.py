@@ -73,11 +73,8 @@ class AsynchInterface(QThread):
         self.responseInterface.responseMessage.connect(self.__handle_response)
         self.responseInterface.start()
 
-        print("!!!!!!!!!!!!!")
-
     def __handle_response(self, data):
-        print(data)
-        #self.rotResponse.emit(data)
+        self.rotResponse.emit(data)
 
     def __del__(self):
         self.wait()

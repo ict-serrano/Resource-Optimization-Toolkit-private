@@ -1,4 +1,3 @@
-import time
 import json
 import serrano_rot.algorithms.algorithmInterface as algorithmInterface
 
@@ -10,8 +9,8 @@ class SimpleMatch(algorithmInterface.AlgorithmInterface):
 
     def launch(self):
 
-        results = { "assignments":[] }
-        replicas = 9
+        results = {"assignments": []}
+        replicas = 1
 
         params = self.get_input_parameters()
         deployment = params["deployment"]

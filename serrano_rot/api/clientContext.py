@@ -1,5 +1,15 @@
+from enum import IntEnum
+
 from serrano_rot.api import clientEvents
 from serrano_rot.api import asynchInterface
+
+
+class ResponseStatus(IntEnum):
+    ACTIVE = 1
+    COMPLETED = 2
+    FAILED = 3
+    REJECTED = 4
+    CANCELLED = 5
 
 
 class ClientContext:
@@ -13,17 +23,16 @@ class ClientContext:
         self.asynchInterface.rotNotification.connect(self.__handle_rot_notification)
         self.asynchInterface.start()
 
-    def __handle_rot_notification(self, notification_params):
-        self.__notify_event_handlers(clientEvents.EventEnginesChanged(notification_params))
+    def __handle_rot_notification(self, notification):
+        self.__notify_event_handlers(clientEvents.EventEnginesChanged(notification))
 
-    def __handle_rot_response(self, evt):
-        print(evt)
-        if evt.response["status"] == 2:
-            self.__notify_event_handlers(clientEvents.EventExecutionCompleted(evt.response))
-        elif evt.response["status"] == 3:
-            self.__notify_event_handlers(clientEvents.EventExecutionError(evt.response))
-        elif evt.response["status"] == 4:
-            self.__notify_event_handlers(clientEvents.EventExecutionTerminated(evt.response))
+    def __handle_rot_response(self, response):
+        if response["status"] == ResponseStatus.COMPLETED:
+            self.__notify_event_handlers(clientEvents.EventExecutionCompleted(response))
+        elif response["status"] == ResponseStatus.FAILED or response["status"] == ResponseStatus.REJECTED:
+            self.__notify_event_handlers(clientEvents.EventExecutionError(response))
+        elif response["status"] == ResponseStatus.CANCELLED:
+            self.__notify_event_handlers(clientEvents.EventExecutionCancelled(response))
 
     def __notify_event_handlers(self, event):
 

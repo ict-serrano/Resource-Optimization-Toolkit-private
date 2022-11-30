@@ -7,7 +7,7 @@ class ExecutionStatus(IntEnum):
     FAILED = 3
     DONE = 4
     RE = 5
-    TERMINATED =6
+    TERMINATED = 6
 
 
 class ResponseStatus(IntEnum):

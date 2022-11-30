@@ -13,6 +13,7 @@ logger = logging.getLogger("SERRANO.ROT.Dispatcher")
 
 
 class Dispatcher(QObject):
+
     dispatcherRequest = pyqtSignal(object)
     executionResponse = pyqtSignal(object)
     engineEvent = pyqtSignal(object)
@@ -33,8 +34,10 @@ class Dispatcher(QObject):
     def __bookkeeping_engines(self):
         engine_ids = self.dbHandler.check_engines()
         for eid in engine_ids:
-            self.engines.remove(eid)
-            del self.executions_per_engine[eid]
+            if eid in self.engines:
+                self.engines.remove(eid)
+            if eid in self.executions_per_engine:
+                del self.executions_per_engine[eid]
             self.dbHandler.set_engine_inactive(eid)
             logger.info("Lost engine '%s' - set it inactive" % eid)
             print("Lost engine '%s' - set it inactive" % eid)
@@ -69,7 +72,10 @@ class Dispatcher(QObject):
         if data["cmd"] == "create":
             if len(self.engines) == 0:
                 logging.debug("No available engines, execution request is discarded.")
-                print("CHECK FOR DISPATCHER NOTIFICATION EVENT")
+                print("No available engines, execution request is discarded.")
+                self.executionResponse.emit({"client_uuid": data["client_uuid"], "uuid": data["execution_id"],
+                                             "status": ResponseStatus.REJECTED, "timestamp": int(time.time()),
+                                             "results": {}, "reason": "No available engines."})
                 return
             engine_id = self.__schedule_execution_request()
             self.executions_per_engine[engine_id].append(data["execution_id"])
@@ -141,8 +147,8 @@ class Dispatcher(QObject):
             if data["execution_id"] in self.client_uuid_per_execution_id:
                 client_uuid = self.client_uuid_per_execution_id[data["execution_id"]]
                 self.executionResponse.emit({"client_uuid": client_uuid, "uuid": data["execution_id"],
-                                             "status": data["status"], "results": data["results"],
-                                             "timestamp": int(time.time())})
+                                             "status": data["status"], "reason": data["reason"],
+                                             "results": data["results"], "timestamp": int(time.time())})
                 logger.debug("Response for execution '%s' is forwarded at client '%s'" % (data["execution_id"],
                                                                                           client_uuid))
                 del self.client_uuid_per_execution_id[data["execution_id"]]
