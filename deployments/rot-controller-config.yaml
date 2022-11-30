@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: rot-controller-config
-  namespace: serrano
+  namespace: integration
 data:
   controller.json: |
     {

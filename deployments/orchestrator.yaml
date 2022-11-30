@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: serrano-rot-controller
-  namespace: serrano
+  namespace: integration
 spec:
   selector:
     matchLabels:
@@ -17,7 +17,7 @@ spec:
       - name: serrano-registry-key
       containers:
       - name: serrano-rot-controller
-        image: ictserrano/serrano:rot-v1.0
+        image: serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline:0.1
         command: ["python3"]
         args: ["/home/serrano/serrano_rot/controllerInstance.py"]
         imagePullPolicy: Always

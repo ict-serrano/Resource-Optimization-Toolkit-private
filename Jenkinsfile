@@ -3,14 +3,16 @@ pipeline {
         PROJECT_NAME = 'serrano-rot-pipeline'
         DEPLOY = "${env.GIT_BRANCH == "origin/main" || env.GIT_BRANCH == "origin/develop" ? "true" : "false"}"
         DEPLOY_UVT = "${env.GIT_BRANCH == "origin/main" ? "true" : "false"}"
-        CHART_NAME = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot" : "serrano-rot-staging"}"
+        ENGINE = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-engine" : "serrano-rot-engine-staging"}"
+        CONTROLLER = "${env.GIT_BRANCH == "origin/main" ? "serrano-rot-controller" : "serrano-rot-controller-staging"}"
         VERSION = '0.1'
         DOMAIN = 'localhost'
-        REGISTRY = 'serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot'
+        REGISTRY = 'serrano-harbor.rid-intrasoft.eu/serrano/serrano-rot-pipeline'
         REGISTRY_URL = 'https://serrano-harbor.rid-intrasoft.eu/serrano'
         REGISTRY_CREDENTIAL = 'harbor-jenkins'
-        UVT_KUBERNETES_PUBLIC_ADDRESS = 'k8s.serrano.cs.uvt.ro'
+        UVT_KUBERNETES_PUBLIC_ADDRESS = 'api.k8s.cloud.ict-serrano.eu'
         INTEGRATION_OPERATOR_TOKEN = credentials('uvt-integration-operator-token')
+        PORT = "10020"
     }
     agent {
         kubernetes {
@@ -24,8 +26,8 @@ pipeline {
             steps {
                 container('python') {
                     sh '/usr/local/bin/python -m pip install --upgrade pip'
-                    sh 'pip install -r requirements.txt'
-                    sh 'pip install --no-input cyclonedx-bom'
+                    sh 'pip3 install -r requirements.txt'
+                    sh 'pip3 install --no-input cyclonedx-bom'
                 }
             }
         }
@@ -87,14 +89,23 @@ pipeline {
                 }
             }
         }
-        /*
-        stage('Deploy in INTRA Kubernetes') {
+        stage('Deploy Rot Engine in INTRA Kubernetes') {
             when {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
                 container('helm') {
-                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CHART_NAME} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CHART_NAME} ./helm"
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
+                }
+            }
+        }
+        stage('Deploy Rot Controller in INTRA Kubernetes') {
+            when {
+                environment name: 'DEPLOY', value: 'true'
+            }
+            steps {
+                container('helm') {
+                    sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
                 }
             }
         }
@@ -103,7 +114,9 @@ pipeline {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
-
+                container('helm') {
+                sh "curl http://${CONTROLLER}:${PORT}/"    
+                }
             }
         }
         stage('Cleanup INTRA Deployment') {
@@ -112,10 +125,37 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "helm uninstall ${CHART_NAME} --namespace integration"
+                    sh "helm uninstall ${ENGINE} --namespace integration"
+                    sh "helm uninstall ${CONTROLLER} --namespace integration"
+                    sh "rm -rf deployments"
                 }
             }
         }
-        */
+        stage('Deploy ROT Engine in UVT Kubernetes') {
+            when {
+                environment name: 'DEPLOY_UVT', value: 'true'
+            }
+            steps {
+                container('helm') {
+                    sh "kubectl config set-cluster kubernetes-uvt --certificate-authority=uvt.cer --embed-certs=true --server=https://${UVT_KUBERNETES_PUBLIC_ADDRESS}:6443"
+                    sh "kubectl config set-credentials integration-operator --token=${INTEGRATION_OPERATOR_TOKEN}"
+                    sh "kubectl config set-context kubernetes-uvt --cluster=kubernetes-uvt --user=integration-operator"
+                    sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm-uvt/engine"
+                }
+            }
+        }
+        stage('Deploy ROT Controller in UVT Kubernetes') {
+            when {
+                environment name: 'DEPLOY_UVT', value: 'true'
+            }
+            steps {
+                container('helm') {
+                    sh "kubectl config set-cluster kubernetes-uvt --certificate-authority=uvt.cer --embed-certs=true --server=https://${UVT_KUBERNETES_PUBLIC_ADDRESS}:6443"
+                    sh "kubectl config set-credentials integration-operator --token=${INTEGRATION_OPERATOR_TOKEN}"
+                    sh "kubectl config set-context kubernetes-uvt --cluster=kubernetes-uvt --user=integration-operator"
+                    sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm-uvt/controller"
+                }
+            }
+        }
     }
 }
