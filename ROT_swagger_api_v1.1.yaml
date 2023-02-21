@@ -5,12 +5,27 @@ info:
   version: 1.1.0
 
 paths:
+  /api/v1/rot/history:
+    get:
+      tags:
+        - ROT
+      summary: Get the list of all executions.
+      description: 'Operation to retrieve the list of all executions, past and currently active'
+      responses:
+        '200':
+          description: Success Response.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/executions'
+        '503':
+          description: Service Unavaible.
   /api/v1/rot/executions:
     get:
       tags:
         - ROT
       summary: Get the list of all active executions.
-      description: 'Operation to retrieve the list of all active executions'
+      description: 'Operation to retrieve the list of all active executions (Execution status either Pending or Started)'
       responses:
         '200':
           description: Success Response.
