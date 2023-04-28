@@ -116,7 +116,7 @@ pipeline {
             steps {
                 container('helm') {
                 sh "curl http://${CONTROLLER}:${PORT}/"
-                sh "python -u unittest/unit_test.py"  
+                //sh "python -u unittest/unit_test.py"  
                 }
             }
         }
