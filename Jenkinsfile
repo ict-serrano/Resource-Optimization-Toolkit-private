@@ -132,7 +132,7 @@ pipeline {
                 }
             }
         }
-        stage('Deploy ROT Engine in UVT Kubernetes') {
+        /*stage('Deploy ROT Engine in UVT Kubernetes') {
             when {
                 environment name: 'DEPLOY_UVT', value: 'true'
             }
@@ -157,6 +157,6 @@ pipeline {
                     sh "helm upgrade --install --force --wait --timeout 600s --kube-context=kubernetes-uvt --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm-uvt/controller"
                 }
             }
-        }
+        }*/
     }
 }
