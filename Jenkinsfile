@@ -115,7 +115,7 @@ pipeline {
             }
             steps {
                 container('python') {
-                sh "python -u unittest/unit_test.py"  
+                sh "python unittest/unit_test.py"  
                 }
             }
         }
