@@ -9,6 +9,8 @@ WORKDIR /home/serrano
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
 COPY serrano_rot/ serrano_rot/
+COPY certs/ certs
+COPY unnittest/ unnittest
 COPY setup.py .
 RUN python3 setup.py install --user
 RUN mkdir -p /home/serrano/.rot
