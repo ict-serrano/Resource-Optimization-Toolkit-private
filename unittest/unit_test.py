@@ -182,6 +182,7 @@ if __name__ == '__main__':
     if os.path.exists(CONF_FILE):
         with open(CONF_FILE) as f:
             config_params = json.load(f)
+    print(config_params)
 
     if config_params is None:
         sys.exit(0)
