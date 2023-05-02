@@ -31,7 +31,7 @@ class ClientInstance:
                 self.__client_uuid = params["api_client"]["client_uuid"]
                 self.__databroker = params["databroker_interface"]
 
-                self.__rest_url = "http://%s:%s" % (params["api_client"]["server_address"],
+                self.__rest_url = "https://%s:%s" % (params["api_client"]["server_address"],
                                                     params["api_client"]["server_port"])
 
                 self.__http_auth = (params["api_client"]["username"], params["api_client"]["password"])

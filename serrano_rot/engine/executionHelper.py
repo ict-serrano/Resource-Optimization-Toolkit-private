@@ -61,7 +61,10 @@ class ExecutionHelper(QObject):
         self.__p.finished.connect(self.__process_finished)
         self.__p.readyReadStandardOutput.connect(self.__handle_stdout)
         self.__p.readyReadStandardError.connect(self.__handle_stderr)
-        self.__p.start("python3", [self.__wrapper_script, execution_plugin, parameters])
+        if execution_plugin == "test":
+            self.__p.start("echo test")
+        else:
+            self.__p.start("python3", [self.__wrapper_script, execution_plugin, parameters])
 
     def terminate(self):
         logger.debug("Terminate assigned execution for Helper_Instance_ID '%s'" % self.__instance_id)

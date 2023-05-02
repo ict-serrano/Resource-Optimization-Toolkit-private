@@ -114,9 +114,8 @@ pipeline {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
-                container('helm') {
-                sh "curl http://${CONTROLLER}:${PORT}/"
-                //sh "python -u unittest/unit_test.py"  
+                container('python') {
+                sh "python -u unittest/unit_test.py"  
                 }
             }
         }
