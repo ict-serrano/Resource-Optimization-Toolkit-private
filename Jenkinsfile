@@ -114,8 +114,8 @@ pipeline {
                 environment name: 'DEPLOY', value: 'true'
             }
             steps {
-                container('helm') {
-                sh "ls unittest/"  
+                container('python') {
+                sh "pyton -m unittest/unit_test.py"  
                 }
             }
         }
