@@ -18,7 +18,7 @@ class TestInstance(unittest.TestCase):
         self.port = self.conf["port"]
         self.username = self.conf["username"]
         self.password = self.conf["password"]
-        self.cert = "/home/serrano/certs/cert.pem"
+        self.cert = "/home/jenkins/agent/workspace/serrano-rot-pipeline/certs/cert.pem"
     
     def test_01_start_execution(self):
         self.params = {"execution_plugin": "test",
