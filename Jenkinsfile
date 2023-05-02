@@ -95,8 +95,6 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "helm uninstall ${ENGINE} --namespace integration"
-                    sh "helm uninstall ${CONTROLLER} --namespace integration"
                     sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${ENGINE} --set image.tag=${VERSION} --set domain=${DOMAIN} ${ENGINE} ./helm/engine"
                 }
             }
@@ -107,7 +105,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "ls /home/"
+                    sh "ls /home/jenkins/"
                     //sh "helm upgrade --install --force --wait --timeout 600s --namespace integration --set name=${CONTROLLER} --set image.tag=${VERSION} --set domain=${DOMAIN} ${CONTROLLER} ./helm/controller"
                 }
             }
@@ -118,7 +116,7 @@ pipeline {
             }
             steps {
                 container('helm') {
-                    sh "ls /home/"
+                    sh "ls /home/jenkins/agent/workspace/serrano-rot-pipeline/"
                     //sh "python -u unittest/unit_test.py"  
                 }
             }
@@ -130,7 +128,7 @@ pipeline {
             steps {
                 container('helm') {
                     sh "helm uninstall ${ENGINE} --namespace integration"
-                    sh "helm uninstall ${CONTROLLER} --namespace integration"
+                    //sh "helm uninstall ${CONTROLLER} --namespace integration"
                     sh "rm -rf deployments"
                 }
             }
