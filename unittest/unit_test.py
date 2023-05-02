@@ -8,11 +8,7 @@ from requests.auth import HTTPBasicAuth
 
 import unittest
 
-import os
-
 CONF_FILE = "/home/serrano/unittest/unittest_conf.json"
-print(os.system("ls /home/serrano/certs/"))
-print(os.system("ls /home/serrano/unittest/"))
 
 class TestInstance(unittest.TestCase):
     
