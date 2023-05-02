@@ -8,8 +8,7 @@ from requests.auth import HTTPBasicAuth
 
 import unittest
 
-CONF_FILE = "/home/serrano/unittest/unittest_conf.json"
-print("PRINT SOMETHING")
+CONF_FILE = "/home/serrano-rot-pipeline/unittest/unittest_conf.json"
 
 class TestInstance(unittest.TestCase):
     
@@ -182,7 +181,6 @@ if __name__ == '__main__':
     if os.path.exists(CONF_FILE):
         with open(CONF_FILE) as f:
             config_params = json.load(f)
-    print(config_params)
 
     if config_params is None:
         sys.exit(0)
