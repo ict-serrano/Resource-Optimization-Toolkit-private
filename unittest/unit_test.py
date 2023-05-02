@@ -9,6 +9,7 @@ from requests.auth import HTTPBasicAuth
 import unittest
 
 CONF_FILE = "/home/serrano/unittest/unittest_conf.json"
+print("PRINT SOMETHING")
 
 class TestInstance(unittest.TestCase):
     
