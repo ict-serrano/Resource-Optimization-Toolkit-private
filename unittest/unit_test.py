@@ -8,6 +8,8 @@ from requests.auth import HTTPBasicAuth
 
 import unittest
 
+import os
+
 CONF_FILE = "/home/serrano/unittest/unittest_conf.json"
 
 class TestInstance(unittest.TestCase):
@@ -19,6 +21,8 @@ class TestInstance(unittest.TestCase):
         self.username = self.conf["username"]
         self.password = self.conf["password"]
         self.cert = "/home/serrano/certs/cert.pem"
+        print(os.system("ls /home/serrano/certs/"))
+        print(os.system("ls /home/serrano/unittest/"))
     
     def test_01_start_execution(self):
         self.params = {"execution_plugin": "test",
