@@ -8,7 +8,7 @@ from requests.auth import HTTPBasicAuth
 
 import unittest
 
-CONF_FILE = "/home/serrano-rot-pipeline/unittest/unittest_conf.json"
+CONF_FILE = "/home/jenkins/agent/workspace/serrano-rot-pipeline/unittest/unittest_conf.json"
 
 class TestInstance(unittest.TestCase):
     
