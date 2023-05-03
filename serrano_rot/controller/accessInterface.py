@@ -40,10 +40,6 @@ class AccessInterface(QThread):
         auth = HTTPBasicAuth()
 
         self.db = db_file
-
-        @self.rest_app.route("/", methods=["GET"])
-        def test():
-            return "Ready"
         
         @auth.verify_password
         def verify_password(username, password):
