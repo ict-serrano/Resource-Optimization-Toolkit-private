@@ -260,6 +260,5 @@ class AccessInterface(QThread):
     def run(self):
         logger.info("AccessInterface is running ...")
 
-        context = ('/home/jenkins/agent/workspace/serrano-rot-pipeline/serrano_rot/certs/cert.pem',
-                   '/home/jenkins/agent/workspace/serrano-rot-pipeline/serrano_rot/certs/key.pem')
+        context = ('serrano_rot/certs/cert.pem', 'serrano_rot/certs/key.pem')
         self.rest_app.run(host=self.address, port=self.port, debug=False, ssl_context=context)
