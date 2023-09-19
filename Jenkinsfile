@@ -27,6 +27,7 @@ pipeline {
                 container('python') {
                     sh '/usr/local/bin/python -m pip install --upgrade pip'
                     sh 'pip3 install -r requirements.txt'
+                    sh 'pip3 install Flask -U'
                     sh 'pip3 install --no-input cyclonedx-bom'
                 }
             }
