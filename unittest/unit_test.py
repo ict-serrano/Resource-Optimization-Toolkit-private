@@ -8,6 +8,8 @@ from requests.auth import HTTPBasicAuth
 
 import unittest
 
+import time
+
 CONF_FILE = "/home/jenkins/agent/workspace/serrano-rot-pipeline/unittest/unittest_conf.json"
 
 class TestInstance(unittest.TestCase):
@@ -32,6 +34,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)
         self.assertEqual(r, 200)
     
     def test_02_get_execution_history(self):
@@ -43,6 +46,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_03_get_executions(self):
@@ -59,6 +63,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_04_get_execution(self):
@@ -71,6 +76,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_05_delete_execution(self):
@@ -83,6 +89,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_06_execution_statistics(self):
@@ -94,6 +101,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_07_active_engines(self):
@@ -105,6 +113,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_08_engine_details(self):
@@ -117,6 +126,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_09_execution_logs(self):
@@ -129,6 +139,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_10_create_user(self):
@@ -143,6 +154,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_11_get_users(self):
@@ -158,6 +170,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
     
     def test_12_delete_user(self):
@@ -170,6 +183,7 @@ class TestInstance(unittest.TestCase):
             r = r.status_code
         except requests.ConnectionError:
                r = 111
+        time.sleep(2)        
         self.assertEqual(r, 200)
 
 if __name__ == '__main__':
